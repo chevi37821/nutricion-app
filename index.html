@@ -1,0 +1,909 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App de Nutrición Personalizada</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f3;
+    --bg3: #eeece8;
+    --text: #1a1a18;
+    --text2: #6b6b67;
+    --text3: #9b9b97;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --radius: 8px;
+    --radius-lg: 12px;
+    --teal: #1D9E75;
+    --blue: #378ADD;
+    --amber: #BA7517;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg2: #252523;
+      --bg3: #2e2e2c;
+      --text: #f0ede8;
+      --text2: #a0a09c;
+      --text3: #6b6b67;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.2);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg3);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 1rem;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+  .header {
+    text-align: center;
+    padding: 1.5rem 1rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .header h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .header p { font-size: 13px; color: var(--text2); }
+  .nav {
+    display: flex; gap: 5px; margin-bottom: 1.25rem;
+    flex-wrap: wrap; background: var(--bg); border-radius: var(--radius-lg);
+    padding: 6px; border: 0.5px solid var(--border);
+  }
+  .nav button {
+    flex: 1; min-width: 80px; font-size: 12px; padding: 7px 10px;
+    border-radius: var(--radius); border: none;
+    background: transparent; color: var(--text2); cursor: pointer;
+    transition: all .15s; white-space: nowrap;
+  }
+  .nav button.active {
+    background: var(--bg2); color: var(--text);
+    font-weight: 500; border: 0.5px solid var(--border2);
+  }
+  .nav button i { margin-right: 4px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .card {
+    background: var(--bg); border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg); padding: .9rem 1.1rem; margin-bottom: .85rem;
+  }
+  .card-accent { border-left: 3px solid var(--teal); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+  .card-warn { border-left: 3px solid var(--amber); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+  .mg { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: .85rem; }
+  .m { background: var(--bg2); border-radius: var(--radius); padding: .65rem .9rem; }
+  .ml { font-size: 11px; color: var(--text2); margin-bottom: 3px; }
+  .mv { font-size: 20px; font-weight: 500; }
+  .mu { font-size: 12px; color: var(--text2); }
+  .row { display: flex; align-items: center; gap: 8px; margin-bottom: .65rem; }
+  .row label { font-size: 12px; color: var(--text2); min-width: 125px; }
+  .row input[type=range] {
+    flex: 1; -webkit-appearance: none; height: 4px;
+    border-radius: 2px; background: var(--border2); outline: none;
+  }
+  .row input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--teal); cursor: pointer;
+  }
+  .row select {
+    flex: 1; font-size: 12px; padding: 6px 10px;
+    border: 0.5px solid var(--border2); border-radius: var(--radius);
+    background: var(--bg); color: var(--text); outline: none;
+  }
+  .row .val { font-size: 12px; font-weight: 500; min-width: 36px; text-align: right; }
+  h3 { font-size: 15px; font-weight: 500; margin-bottom: .65rem; }
+  h4 { font-size: 13px; font-weight: 500; color: var(--text2); margin: .6rem 0 .35rem; }
+  .badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: var(--radius); font-weight: 500; }
+  .bg { background: #EAF3DE; color: #27500A; }
+  .ba { background: #FAEEDA; color: #633806; }
+  .bb { background: #E6F1FB; color: #0C447C; }
+  .bt { background: #E1F5EE; color: #085041; }
+  .br { background: #FCEBEB; color: #791F1F; }
+  .bp { background: #EEEDFE; color: #26215C; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; padding: 5px 8px; border-bottom: 0.5px solid var(--border); color: var(--text2); font-weight: 500; }
+  td { padding: 5px 8px; border-bottom: 0.5px solid var(--border); vertical-align: top; }
+  tr:last-child td { border: none; }
+  .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: .5rem; }
+  .fi { border: 0.5px solid var(--border); border-radius: var(--radius); padding: .55rem .75rem; }
+  .fn { font-size: 13px; font-weight: 500; }
+  .fd { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
+  .meal { border-left: 2px solid var(--teal); padding: .4rem 0 .4rem .65rem; margin-bottom: .6rem; }
+  .mt { font-size: 12px; font-weight: 500; }
+  .mi { font-size: 11px; color: var(--text2); line-height: 1.5; margin-top: 2px; }
+  .bw {
+    width: 100%; margin-top: .65rem; padding: 9px;
+    font-size: 12px; cursor: pointer;
+    border: 0.5px solid var(--border2); border-radius: var(--radius);
+    background: var(--bg); color: var(--text);
+    transition: background .15s;
+  }
+  .bw:hover { background: var(--bg2); }
+  .bwrap { background: var(--bg2); border-radius: 3px; height: 7px; overflow: hidden; margin-top: 3px; }
+  .bh { height: 7px; border-radius: 3px; }
+  .pl { display: flex; justify-content: space-between; font-size: 11px; color: var(--text2); margin-bottom: 2px; }
+  .src { font-size: 10px; color: var(--text3); font-style: italic; margin-top: .35rem; }
+  .sys-row { display: flex; gap: 6px; margin-top: .5rem; flex-wrap: wrap; }
+  .sys-chip {
+    font-size: 11px; padding: 5px 11px; border-radius: var(--radius);
+    border: 0.5px solid var(--border); color: var(--text2); cursor: pointer;
+    transition: all .15s;
+  }
+  .sys-chip.act { background: var(--bg2); color: var(--text); border-color: var(--border2); font-weight: 500; }
+  .score-num { font-size: 42px; font-weight: 500; text-align: center; padding: .75rem 0; }
+  .score-lbl { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: .75rem; }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 11px; }
+    .nav, button, .src, select, label { display: none !important; }
+    .section { display: block !important; }
+    #perfil, #microbiota, #prebioticos, #deporte, #suplementos { display: none !important; }
+    #plan { display: block !important; }
+    .card { border: 0.5px solid #ccc; break-inside: avoid; margin-bottom: 6px; padding: .6rem; }
+    .header h1 { font-size: 16px; } .header p { font-size: 10px; }
+    .meal { padding: .3rem 0; border-bottom: 0.5px solid #eee; }
+    .mt { font-size: 11px; font-weight: 600; color: #1D9E75; }
+    .mi { font-size: 10px; color: #333; margin-top: 2px; }
+    h3 { font-size: 13px; margin-bottom: .4rem; }
+  }
+  @media (max-width: 500px) {
+    .fg { grid-template-columns: 1fr; }
+    .mg { grid-template-columns: 1fr 1fr; }
+    .nav button { font-size: 11px; padding: 6px 7px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1><i class="ti ti-salad"></i> App de Nutrición</h1>
+    <p>Basada en <em>Alimentación Prebiótica</em> (Cañellas & Sanchis) y <em>Nutrición en el Deporte</em> (Abel Heredia)</p>
+  </div>
+
+  <div class="nav">
+    <button class="active" onclick="show('perfil',this)"><i class="ti ti-user"></i>Perfil</button>
+    <button onclick="show('plan',this)"><i class="ti ti-calendar"></i>Plan</button>
+    <button onclick="show('microbiota',this)"><i class="ti ti-dna"></i>Microbiota</button>
+    <button onclick="show('prebioticos',this)"><i class="ti ti-leaf"></i>Prebióticos</button>
+    <button onclick="show('deporte',this)"><i class="ti ti-run"></i>Deporte</button>
+    <button onclick="show('suplementos',this)"><i class="ti ti-pill"></i>Suplementos</button>
+  </div>
+
+  <!-- PERFIL -->
+  <div id="perfil" class="section active">
+    <div class="card">
+      <h3>Tu perfil nutricional</h3>
+      <div class="row"><label>Peso (kg)</label><input type="range" id="peso" min="40" max="150" value="70" step="1" oninput="upd()"><span class="val" id="pv">70</span></div>
+      <div class="row"><label>Talla (cm)</label><input type="range" id="talla" min="140" max="210" value="170" step="1" oninput="upd()"><span class="val" id="tv">170</span></div>
+      <div class="row"><label>Edad</label><input type="range" id="edad" min="15" max="80" value="30" step="1" oninput="upd()"><span class="val" id="ev">30</span></div>
+      <div class="row"><label>Sexo</label><select id="sexo" onchange="upd()"><option value="h">Hombre</option><option value="m">Mujer</option></select></div>
+      <div class="row"><label>Nivel de actividad</label><select id="act" onchange="upd()">
+        <option value="1.2">Sedentario (oficina, sin ejercicio)</option>
+        <option value="1.5">Ligera (1-3 días/sem)</option>
+        <option value="1.64" selected>Moderada (3-5 días/sem)</option>
+        <option value="1.78">Activa (6-7 días/sem)</option>
+        <option value="1.9">Muy activa / atleta profesional</option>
+      </select></div>
+      <div class="row"><label>Objetivo</label><select id="obj" onchange="upd()">
+        <option value="0">Mantenimiento de peso</option>
+        <option value="-300">Pérdida de grasa moderada (-300 kcal)</option>
+        <option value="-500">Pérdida de grasa intensa (-500 kcal)</option>
+        <option value="300">Ganancia muscular (+300 kcal)</option>
+      </select></div>
+      <p class="src">Fórmula Harris-Benedict (Bonet 2016) · Factores actividad: Abel Heredia, Tema 4</p>
+    </div>
+    <div class="mg" id="metrics"></div>
+    <div class="card card-accent">
+      <h4>Distribución energética recomendada</h4>
+      <div id="macrodist"></div>
+      <p class="src">Palacios 2009 · Abel Heredia: 60-65% carbohidratos / 20-30% grasas / 12-15% proteína (deportistas)</p>
+    </div>
+  </div>
+
+  <!-- PLAN -->
+  <div id="plan" class="section">
+    <div class="card">
+      <h3>Plan alimentario semanal</h3>
+      <div class="row"><label>Enfoque nutricional</label><select id="enfoque" onchange="renderPlan()">
+        <option value="microbiota">Alimentación prebiótica (microbiota)</option>
+        <option value="deporte">Rendimiento deportivo + Suplementos — Semana 1</option>
+        <option value="deporte2">Rendimiento deportivo + Suplementos — Semana 2</option>
+        <option value="perdida">Pérdida de grasa</option>
+        <option value="crisis">🔴 Protocolo Crisis Colon Irritable (Rifaximin)</option>
+        <option value="diarrea">🟡 Protocolo Diarrea Aguda / Día de Colon Alterado</option>
+      </select></div>
+      <button onclick="window.print()" style="margin-top:.6rem;width:100%;padding:.5rem;background:var(--teal);color:#fff;border:none;border-radius:var(--radius);font-size:13px;cursor:pointer;font-weight:500">🖨 Imprimir / Guardar PDF</button>
+    </div>
+    <div id="plan-content"></div>
+  </div>
+
+  <!-- MICROBIOTA -->
+  <div id="microbiota" class="section">
+    <div class="card">
+      <h3>Evaluación de tu microbiota</h3>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:.65rem">Según <em>Alimentación Prebiótica</em> — Cañellas, Sanchis, Aguado, Redondo (2017)</p>
+      <div class="row"><label>Fibra diaria (g)</label><input type="range" id="fibra" min="0" max="50" value="15" step="1" oninput="updM()"><span class="val" id="fv">15</span></div>
+      <div class="row"><label>Verduras/día (raciones)</label><input type="range" id="verd" min="0" max="10" value="2" step="1" oninput="updM()"><span class="val" id="vv">2</span></div>
+      <div class="row"><label>Fermentados/semana</label><input type="range" id="ferm" min="0" max="14" value="1" step="1" oninput="updM()"><span class="val" id="fev">1</span></div>
+      <div class="row"><label>Legumbres/semana</label><input type="range" id="legu" min="0" max="7" value="1" step="1" oninput="updM()"><span class="val" id="lv">1</span></div>
+      <div class="row"><label>Ultraprocesados/día</label><input type="range" id="ultra" min="0" max="10" value="3" step="1" oninput="updM()"><span class="val" id="uv">3</span></div>
+      <div class="row"><label>Antibióticos (último año)</label><select id="anti" onchange="updM()"><option value="0">Ninguno</option><option value="1">1 ciclo</option><option value="2">2+ ciclos</option></select></div>
+      <div class="row"><label>Estrés crónico</label><select id="estres" onchange="updM()"><option value="0">Bajo</option><option value="1">Moderado</option><option value="2">Alto</option></select></div>
+    </div>
+    <div id="micro-result"></div>
+    <div class="card" style="border-left:3px solid #c0392b;border-radius:0 var(--radius-lg) var(--radius-lg) 0">
+      <h4 style="color:#c0392b">⚠ Colon irritable — Tu guía personalizada</h4>
+      <p style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:.4rem">
+        <strong>Alimentos que pueden irritarte (empieza con poca cantidad):</strong><br>
+        Pimentón rojo/verde (confirmado que te hace daño — evítalo siempre) · Cebolla y ajo crudos en exceso · Frijoles y lentejas sin cocinar bien · Leche entera · Grasas fritas · Bebidas carbonatadas · Café en exceso (más de 2 tazas/día)
+      </p>
+      <p style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:.5rem">
+        <strong>Lo que calma y protege tu colon:</strong><br>
+        Arroz blanco · Papa criolla y yuca cocidas · Banano maduro · Zanahoria y ahuyama cocidas · Pollo y pescado a la plancha · Huevos · Avena en agua · Kumis natural sin azúcar (bacterias vivas que calman el colon) · Jengibre en infusión (antiinflamatorio natural del intestino) · Cúrcuma con pimienta negra
+      </p>
+      <p style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:.5rem">
+        <strong>Hábitos clave para el colon irritable + triatlón:</strong><br>
+        Come despacio y mastica bien · Come cada 3-4 horas, no dejes pasar mucho tiempo sin comer · Antes de entrenar: alimentos fáciles de digerir (banano, avena, arroz) · El estrés del entrenamiento fuerte también irrita el colon — el magnesio por las noches ayuda a los dos problemas (intestino y sueño) · Tomar infusión de jengibre + cúrcuma después del almuerzo calma el intestino y reduce la inflamación post-entreno
+      </p>
+      <p class="src">Basado en protocolo FODMAP adaptado + Alimentación Prebiótica (Cañellas 2017)</p>
+    </div>
+    <div class="card card-warn">
+      <h4>Sustancias disbióticas a evitar</h4>
+      <p style="font-size:12px;color:var(--text2);line-height:1.6">
+        Azúcares refinados · Grasas oxidadas (fritos) · Aceites refinados · Grasas trans (aceites vegetales parcialmente hidrogenados) · Trigo moderno en bollería/galletas/pan de molde · Edulcorantes: sacarina (E-954), sucralosa (E-955), aspartamo (E-951) · Emulsionantes: carboximetilcelulosa (E-466), polisorbato 80 (E-433)
+      </p>
+      <p class="src">Fuente: cap. "Alimentación Disbiótica", Alimentación Prebiótica (2017)</p>
+    </div>
+    <div class="card">
+      <h4>El eje microbiota-intestino-cerebro</h4>
+      <p style="font-size:12px;color:var(--text2);line-height:1.6">La microbiota modula el comportamiento y las emociones a través del nervio vago (conexión directa intestino-cerebro). El estrés crónico altera el pared interior del intestino (↑ permeabilidad), reduce la mucina protectora y causa disbiosis. La microbiota produce <strong>ácidos grasos de cadena corta (AGCC)</strong>: butirato, propionato y acetato. El butirato tiene el mayor potencial antitumoral y reparador del colon.</p>
+      <p class="src">Dr. John F. Cryan, Universidad de Cork · Alimentación Prebiótica pp. 17-18</p>
+    </div>
+  </div>
+
+  <!-- PREBIÓTICOS -->
+  <div id="prebioticos" class="section">
+    <div class="card">
+      <h3>Fibras que alimentan tus bacterias buenas — con alimentos colombianos</h3>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:.65rem">Basado en la Tabla 1 de <em>Alimentación Prebiótica</em> (Cañellas et al., 2017) · adaptado a Colombia</p>
+      <table>
+        <tr><th>Tipo de fibra</th><th>Alimentos colombianos</th><th>Cómo prepararlos</th></tr>
+        <tr><td><span class="badge bt">Pectinas</span></td><td>Guayaba (con cáscara), maracuyá, mango, zanahoria, papaya, mora, feijoa, tomate de árbol</td><td>Cocinados sueltan más fibra. Guayaba cocida o en compota casera = excelente. Comer la cáscara cuando sea posible.</td></tr>
+        <tr><td><span class="badge bg">Beta-glucanos</span></td><td>Avena en hojuelas (la de toda la vida), cebada</td><td>Avena en agua o leche = la forma más económica y efectiva. Reduce el colesterol malo y estabiliza el azúcar.</td></tr>
+        <tr><td><span class="badge bb">Mucílagos</span></td><td>Semillas de chía, linaza (se consigue en tiendas naturistas)</td><td>Chía en remojo 10 min antes de comer. Linaza: hervir en agua fría y tomar el líquido. Forman un gel que protege el intestino.</td></tr>
+        <tr><td><span class="badge ba">Fructanos (inulina)</span></td><td>Cebolla cabezona, cebolla larga, ajo, puerro, banano maduro, achiras</td><td>No cocinar demasiado (se pierde la fibra). Si te dan gases al principio, empieza con poca cantidad e irás acostumbrándote.</td></tr>
+        <tr><td><span class="badge bp">Fibra de legumbres</span></td><td>Frijoles (rojos, negros, cargamanto), lentejas, arvejas, habas, garbanzo</td><td>3-4 veces por semana. Son la mejor fuente de fibra para las bacterias buenas del intestino.</td></tr>
+        <tr><td><span class="badge br">Almidón resistente</span></td><td>Papa criolla, yuca, ñame, arracacha, plátano verde, arroz — todos cocinados y ENFRIADOS en nevera</td><td>Cocinar → meter a la nevera mínimo 4 horas → puedes recalentar sin superar temperatura muy alta. Así se forma la fibra que alimenta tus bacterias.</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Los mejores alimentos colombianos para tu intestino</h3>
+      <div class="fg">
+        <div class="fi"><div class="fn">🍈 Guayaba y zanahoria</div><div class="fd">La guayaba es la fruta colombiana más rica en pectinas. Cocinada libera más fibra. Con cáscara siempre.</div></div>
+        <div class="fi"><div class="fn">🍠 Papa criolla, yuca y ñame enfriados</div><div class="fd">Al enfriarlos en la nevera forman una fibra especial que alimenta directamente tus bacterias buenas. Puedes recalentarlos después.</div></div>
+        <div class="fi"><div class="fn">🧅 Cebolla larga, cebolla, ajo</div><div class="fd">Son los mejores tubérculos prebióticos que tienes al alcance. Úsalos en guisos, sofritos y ensaladas.</div></div>
+        <div class="fi"><div class="fn">🥣 Avena en hojuelas</div><div class="fd">El cereal más poderoso para el intestino. En agua con canela, en mazamorra o como colada. Reduce el colesterol malo.</div></div>
+        <div class="fi"><div class="fn">🍫 Cacao en polvo puro</div><div class="fd">El cacao colombiano es de los mejores del mundo. Úsalo sin azúcar: en agua caliente o leche. Mínimo 85% pureza si es tableta.</div></div>
+        <div class="fi"><div class="fn">🍓 Mora, uchuva y agraz</div><div class="fd">Son los "arándanos colombianos". Aumentan las bacterias buenas del intestino en pocas semanas. Frescos o congelados.</div></div>
+        <div class="fi"><div class="fn">🥬 Kumis casero o yogur natural</div><div class="fd">El kumis es un fermentado típico colombiano, igual de bueno que el kéfir. Lleno de bacterias vivas. Sin azúcar añadida.</div></div>
+        <div class="fi"><div class="fn">🌶 Comino, cilantro, cúrcuma, jengibre</div><div class="fd">Las especias colombianas más usadas también controlan bacterias malas en el intestino. Úsalas generosamente en cada comida.</div></div>
+        <div class="fi"><div class="fn">🐟 Bocachico, mojarra, bagre</div><div class="fd">Pescados del río colombiano ricos en omega-3. Mínimo 3 veces por semana. A la plancha o al vapor.</div></div>
+        <div class="fi"><div class="fn">🥜 Maní natural tostado</div><div class="fd">El maní colombiano sin sal ni freír aumenta las bacterias que producen sustancias que reparan el intestino.</div></div>
+        <div class="fi"><div class="fn">🍯 Miel de abejas o miel de caña</div><div class="fd">La miel cruda colombiana (sin pasteurizar) tiene enzimas y fibras que nutren tu microbiota. Solo en pequeñas cantidades.</div></div>
+        <div class="fi"><div class="fn">🌱 Chía y linaza</div><div class="fd">En remojo forman un gel que protege y alimenta el recubrimiento del intestino. Fáciles de conseguir en tiendas naturistas.</div></div>
+      </div>
+      <p class="src">Adaptado de Alimentación Prebiótica (2017) con alimentos disponibles en Colombia</p>
+    </div>
+    <div class="card">
+      <h4>¿Por qué las especias colombianas son tan buenas para el intestino?</h4>
+      <p style="font-size:12px;color:var(--text2);line-height:1.6">El comino, el cilantro, la cúrcuma y el jengibre contienen sustancias llamadas polifenoles que solo se absorben un 5-10% en el intestino delgado. Eso es bueno: llegan en mayor cantidad al intestino grueso donde tus bacterias buenas los usan para crecer y producir sustancias que reparan tu intestino. <strong>Úsalos en cada comida sin miedo.</strong></p>
+    </div>
+  </div>
+
+  <!-- DEPORTE -->
+  <div id="deporte" class="section">
+    <div class="card">
+      <h3>Sistemas energéticos en el deporte</h3>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:.5rem">Selecciona la duración de tu esfuerzo:</p>
+      <div class="sys-row" id="sysrow">
+        <span class="sys-chip act" onclick="setSys(0)">Velocidad &lt;30s</span>
+        <span class="sys-chip" onclick="setSys(1)">30s – 1.5 min</span>
+        <span class="sys-chip" onclick="setSys(2)">1.5 – 10 min</span>
+        <span class="sys-chip" onclick="setSys(3)">Resistencia &gt;10 min</span>
+      </div>
+      <div id="sys-detail" style="margin-top:.75rem"></div>
+      <p class="src">Apuntes Nutrición en el Deporte — Abel Heredia, Tema 4 · Sistemas fosf. / ác. láctico / aeróbico</p>
+    </div>
+    <div class="card">
+      <h3>Nutrición pre / durante / post ejercicio</h3>
+      <table>
+        <tr><th>Momento</th><th>Objetivo</th><th>Qué comer</th></tr>
+        <tr><td style="color:#0C447C;font-weight:500">Antes (2-3h)</td><td>Cargar reservas de energía en el músculo</td><td>Energía que sube el azúcar despacio: avena en hojuelas, arroz integral, yuca cocida, papa criolla, plátano maduro. Poca grasa.</td></tr>
+        <tr><td style="color:#0C447C;font-weight:500">Antes (30-60 min)</td><td>Energía disponible rápida</td><td>Energía rápida: banano maduro, mango, panela disuelta en agua, guayaba. Cantidad pequeña.</td></tr>
+        <tr><td style="color:#27500A;font-weight:500">Durante (&gt;60 min)</td><td>Mantener el nivel de azúcar en sangre estable</td><td>Agua de panela con sal de limón, o banano. Objetivo: 30-60g de energía/hora. Cada 15-20 min.</td></tr>
+        <tr><td style="color:#633806;font-weight:500">Después (0-30 min)</td><td>Reparar músculo + reponer energía gastada</td><td>Proteína de calidad (pollo, huevo, pescado como bocachico o mojarra) + energía rápida (arroz blanco, banano, jugo de fruta natural). Los primeros 30 min son clave.</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Macros por tipo de deporte</h3>
+      <div class="row"><label>Tipo de deporte</label><select id="dsport" onchange="updD()">
+        <option value="triatlon">Triatlón (natación + ciclismo + carrera)</option>
+        <option value="fuerza">Fuerza / hipertrofia (gym)</option>
+        <option value="resistencia">Resistencia / cardio</option>
+        <option value="mixto">Mixto (CrossFit, deportes de equipo)</option>
+        <option value="amateur">Amateur (1h/día moderado)</option>
+      </select></div>
+      <div id="dmetrics" style="margin-top:.65rem"></div>
+    </div>
+  </div>
+
+  <!-- SUPLEMENTOS -->
+  <div id="suplementos" class="section">
+    <div class="card">
+      <h3>Guía de suplementación basada en evidencia</h3>
+      <div class="row"><label>Objetivo</label><select id="sobj" onchange="renderSupl()">
+        <option value="microbiota">Microbiota / salud intestinal</option>
+        <option value="energia">Estimulación y energía</option>
+        <option value="testosterona">Testosterona y vitalidad</option>
+        <option value="muscular">Desarrollo muscular</option>
+        <option value="recuperacion">Recuperación post-ejercicio</option>
+      </select></div>
+    </div>
+    <div id="supl-content"></div>
+    <div class="card card-warn">
+      <h4>Conductas peligrosas a evitar</h4>
+      <p style="font-size:12px;color:var(--text2);line-height:1.6">
+        Restricción severa de HC → agotamiento de reservas de energía (glucógeno), fatiga y dificultad de concentración ·
+        Dietas muy bajas en grasa → déficit vitaminas liposolubles + ↓ testosterona ·
+        Diuréticos sin control médico ·
+        Bebidas azucaradas como hidratación deportiva ·
+        Alcohol post-entreno: inhibe síntesis de proteínas miofibrilares incluso tomando whey (Parr 2014)
+      </p>
+      <p class="src">Fuente: Suplementación y Nutrición Deportiva — sección 5.4 conductas peligrosas</p>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+const sysData=[
+  {name:'Sistema energía explosiva del músculo (fosfocreatina) (anaeróbico aláctico)',dur:'< 30 segundos',sub:'Energía explosiva del músculo (fosfocreatina)',pros:'Energía más rápida disponible. Se sintetiza de proteínas que el cuerpo no fabrica solo (no requiere suplemento externo).',cons:'Reservas muy limitadas. Músculo debe estar saturado de energía explosiva del músculo (fosfocreatina).',ej:'Sprint 100m y 200m, saltos, halterofilia, golpes de tenis y golf, lanzamiento de peso',hc:'BAJA necesidad de HC',prot:'Alta (para recuperación)',color:'#E6F1FB',tc:'#0C447C'},
+  {name:'Energía explosiva del músculo (fosfocreatina) + Ácido láctico',dur:'30 segundos – 1.5 min',sub:'Reservas de energía (glucógeno) muscular',pros:'Obtención rápida de energía. Adaptable.',cons:'Solo 2 ATP/molécula de glucosa. Ácido láctico = fatiga (factor limitante).',ej:'400m lisos, natación 100m, pruebas de pista mixtas',hc:'ALTA (cargar reservas de energía (glucógeno) previo)',prot:'Moderada-alta',color:'#E1F5EE',tc:'#085041'},
+  {name:'Ácido láctico + Sistema aeróbico',dur:'1.5 – 10 minutos',sub:'Reservas de energía (glucógeno) + glucosa en sangre',pros:'Doble sistema. Adaptación a cambios de intensidad durante el esfuerzo.',cons:'Riesgo de hiponivel de azúcar en sangre si no hay carga previa de HC.',ej:'800m lisos, boxeo (asaltos 3 min), lucha (asaltos 2 min), pruebas gimnásticas',hc:'ALTA (pre y durante)',prot:'Alta + leucina',color:'#FAEEDA',tc:'#633806'},
+  {name:'Sistema aeróbico',dur:'> 10 min — horas',sub:'HC + Grasas + Proteínas (por ese orden)',pros:'38 ATP/molécula glucosa. Con entrenamiento aeróbico: 75% energía desde grasas. Grandes reservas.',cons:'Producción lenta de ATP. Requiere O₂ constante.',ej:'Maratón, ciclismo, esquí de fondo, natación de fondo, alpinismo, triatlón',hc:'CRÍTICA (antes, durante y después)',prot:'Moderada + leucina para recuperación',color:'#EAF3DE',tc:'#27500A'},
+];
+
+const suplData={
+  microbiota:[
+    {n:'Probiótico multi-cepa',d:'L. acidophilus + L. rhamnosus + B. longum + B. bifidum',e:'Alta',c:'bg',dos:'10-50 mil millones bacterias vivas · En ayunas o con comida fría. Mín. 60 días.',nota:'Especialmente crítico post-antibióticos. Protocolo de 60 días para restaurar diversidad.'},
+    {n:'Prebiótico (inulina/FOS)',d:'Alimenta selectivamente Bifidobacterias y Lactobacilos',e:'Alta',c:'bg',dos:'5-10g/día con comida. Aumentar gradualmente para evitar gases.',nota:'Fuente natural preferible: alcachofa, puerro, cebolla, espárragos, plátano verde.'},
+    {n:'Butirato sódico',d:'Ácido graso de cadena corta · Nutre células del intestino del colon',e:'Moderada',c:'bb',dos:'150-600mg/día con comida',nota:'Potencial antitumoral y reparador del pared interior del intestino. Se produce de forma natural con dieta prebiótica.'},
+    {n:'L-Glutamina',d:'Aminoácido condicional · Repara la barrera intestinal',e:'Moderada',c:'bb',dos:'5-15g/día en ayunas (mañana)',nota:'Útil en intestino permeable aumentada o estrés crónico que altera la mucosa.'},
+    {n:'Omega-3 omega-3',d:'Antiinflamatorio sistémico e intestinal. Impacto positivo en microbiota.',e:'Alta',c:'bg',dos:'1-3g/día con comida grasa. Mín. 3 veces/sem pescado azul pequeño.',nota:'Fuente natural preferida: sardina, boquerón, caballa, jurel, arenque.'},
+    {n:'Vitamina D3 + K2',d:'Modula inmunidad intestinal (80% sistema inmune = intestino)',e:'Alta',c:'bg',dos:'1000-4000 UI D3 + 100mcg K2 · Con comida grasa · Mañana.',nota:'Déficit muy común. Afecta composición microbiana directamente.'},
+  ],
+  energia:[
+    {n:'Cafeína',d:'Mejora rendimiento aeróbico, fuerza y concentración',e:'Máxima',c:'bg',dos:'3-6mg/kg · 45-60 min antes del ejercicio. Máx. 400mg/día.',nota:'También tiene efecto antioxidante. No tomar después de las 15h para no alterar el sueño.'},
+    {n:'Bebidas isotónicas / deportivas',d:'Hidratación + carbohidratos + electrolitos durante ejercicio prolongado',e:'Alta',c:'bg',dos:'30-60g de carbohidratos/hora de ejercicio. Cada 15-20 min. Pequeños sorbos.',nota:'Reposición de sodio y cloro (principales electrolitos perdidos en el sudor). '},
+    {n:'Barritas energéticas',d:'HC + proteína para deportes de larga duración con pausas',e:'Alta',c:'bg',dos:'1 barrita cada 60-90 min de ejercicio prolongado.',nota:'Ideales en ciclismo, alpinismo, triatlón. Alternativa natural: dátiles + almendras.'},
+    {n:'Bicarbonato sódico',d:'Tampón del ácido láctico. Retrasa fatiga en esfuerzos anaeróbicos.',e:'Moderada',c:'bb',dos:'0.3g/kg, 60-90 min antes del ejercicio',nota:'Puede causar molestias gastrointestinales. Probar siempre en entrenamiento antes de competición.'},
+  ],
+  testosterona:[
+    {n:'Zinc',d:'Mineral clave para producir testosterona. El más importante. El entrenamiento intenso lo agota.',e:'Alta',c:'bg',dos:'15-30mg/día con comida. No en ayunas (puede dar náuseas).',nota:'Alimentos colombianos ricos en zinc: semillas de auyama (las pepitas verdes de la calabaza), maní, carne de res, pollo, sardinas, frijoles bien cocidos.'},
+    {n:'Vitamina D3',d:'Precursora de hormonas. Niveles bajos de vitamina D = testosterona baja. Muy común en personas que entrenan bajo techo.',e:'Alta',c:'bg',dos:'2000-4000 UI al día con el almuerzo (con grasa para absorción). Tomar sol 20 min/día también ayuda mucho.',nota:'En Colombia hay sol todo el año — tomar el sol sin protector en brazos y piernas 15-20 min al día es gratis y muy efectivo.'},
+    {n:'Ashwagandha (ginseng indio)',d:'Planta adaptógena. Baja el cortisol (hormona del estrés) y sube la testosterona. También mejora la energía y el sueño.',e:'Alta',c:'bg',dos:'300-600mg del extracto KSM-66 por la noche. Mínimo 8 semanas para ver resultados.',nota:'Estudios con hombres activos muestran subida de testosterona del 14-22% en 8 semanas. Se consigue en tiendas naturistas.'},
+    {n:'Magnesio glicinato',d:'El magnesio libre (no unido a proteínas) es el que activa la testosterona. Los deportistas lo pierden en el sudor.',e:'Alta',c:'bg',dos:'300-400mg por la noche. Forma glicinato = mejor absorción y mejor sueño.',nota:'Alimentos: cacao puro sin azúcar, maní, banano, avena, espinaca. El sueño profundo es el momento en que más testosterona se produce — el magnesio mejora el sueño.'},
+    {n:'Omega-3 (EPA+DHA)',d:'Las grasas buenas son la materia prima de las hormonas. Sin grasa saludable, no hay testosterona.',e:'Alta',c:'bg',dos:'2-3g/día con el almuerzo. Mínimo 3 veces/semana pescado azul.',nota:'Colombianos: bocachico, mojarra, bagre, sardinas. El aguacate y el maní también aportan grasas para las hormonas, aunque son omega-9.'},
+    {n:'Sueño profundo',d:'No es un suplemento pero ES el factor #1 de testosterona. El 95% de la testosterona diaria se produce durante el sueño profundo (entre la 1am y las 3am).',e:'Máxima',c:'bg',dos:'7-9 horas por noche. Oscuridad total. Sin pantallas 1 hora antes de dormir.',nota:'Una semana durmiendo 5 horas = testosterona cae un 15% (estudio Universidad de Chicago). Esto también explica el sueño y baja energía que sientes después de entrenar duro.'},
+  ],
+  muscular:[
+    {n:'Creatina monohidrato',d:'Recarga energía explosiva del músculo (fosfocreatina) muscular. ↑ Fuerza, potencia y recuperación.',e:'Máxima',c:'bg',dos:'3-5g/día (sin fase de carga necesaria). Cualquier momento del día.',nota:'El suplemento con mayor evidencia científica disponible. No requiere ciclado. Seguro a largo plazo.'},
+    {n:'Proteína whey (suero de leche)',d:'Alto calidad de la proteína. Contiene todos los proteínas que el cuerpo no fabrica solo.',e:'Alta',c:'bg',dos:'20-40g post-entreno (ventana 0-30 min). 1.6-2g proteína/kg/día total.',nota:'Alternativa natural: 4-5 claras + 1 yema + yogur griego. Si ingesta total proteína es adecuada, el suplemento aporta poco extra.'},
+    {n:'BCAA (leucina, isoleucina, valina)',d:'Estimulan construcción muscular. Útiles en ayuno o restricción calórica.',e:'Moderada',c:'bb',dos:'5-10g antes o durante el entreno (si hay ayuno prolongado previo)',nota:'Si la ingesta total de proteína es adecuada (1.6-2g/kg/día), los BCAA aportan beneficio marginal.'},
+    {n:'Beta-alanina',d:'Aumenta carnosina muscular. Retrasa fatiga en esfuerzos de 1-4 min.',e:'Moderada',c:'bb',dos:'3.2-6.4g/día con comida. En 2 tomas para reducir parestesias.',nota:'El hormigueo cutáneo (parestesia) es normal y temporal. Efecto acumulativo en 4-6 semanas.'},
+  ],
+  recuperacion:[
+    {n:'Omega-3 omega-3',d:'Antiinflamatorio post-ejercicio. Reduce daño muscular y peroxidación.',e:'Alta',c:'bg',dos:'2-4g/día con comida grasa',nota:'Especialmente útil en oxidación de grasas en el cuerpo y fatiga muscular post-ejercicio intenso.'},
+    {n:'Vitamina C',d:'Antioxidante. Síntesis de colágeno (tendones y ligamentos).',e:'Alta',c:'bg',dos:'500-1000mg/día preferiblemente post-entreno (no pre: puede bloquear adaptaciones)',nota:'Fuentes colombianas: guayaba (más vitamina C que el kiwi), acerola, mora, maracuyá, papaya, brócoli, mango. Nota: el pimentón rojo tiene mucha vitamina C pero si te hace daño de estómago, la guayaba lo supera ampliamente.'},
+    {n:'Vitamina E (tocoferol)',d:'Protege membranas celulares y evita oxidación del colesterol.',e:'Alta',c:'bg',dos:'15mg/día desde dieta. Fuentes: frutos secos, aceite de oliva virgen extra, semillas, cereales integrales.',nota:'Uno de los antioxidantes más relevantes para deportistas según revisión Palacios 2009.'},
+    {n:'Magnesio glicinato o malato',d:'Función muscular, construcción muscular, sueño y recuperación.',e:'Alta',c:'bg',dos:'200-400mg por la noche. Formas glicinato/malato = mayor absorción.',nota:'Deportistas pierden magnesio en el sudor. Déficit muy frecuente en personas activas.'},
+    {n:'Selenio',d:'Enlentece envejecimiento celular. ↑ Glóbulos blancos. Anticancerígeno.',e:'Moderada',c:'bb',dos:'55-200mcg/día desde alimentos: carne, pescado, legumbres, integrales.',nota:'No superar 400mcg/día (riesgo de toxicidad). Preferible desde alimentos.'},
+  ]
+};
+
+const dSports={
+  triatlon:{hc:'65-70%',p:'14-16% · 1.4-1.6g/kg/día',g:'20-25%',nota:'Sistema aeróbico dominante (>10 min). CLAVE: cargar energía la noche anterior con arroz integral o yuca. Mañana de entreno: avena + banano 1.5-2h antes. DURANTE: agua de panela con sal y limón cada 15-20 min (isotónico natural colombiano = 30-60g de azúcar/hora). DESPUÉS (primeros 30 min): arroz blanco + pollo o huevos. Si entrenas gym + triatlón el mismo día: primero gym, luego cardio. Proteína en 4-5 tomas repartidas del día.'},
+  fuerza:{hc:'45-55%',p:'20-25% · 1.6-2g/kg/día',g:'25-30%',nota:'En ganancia muscular: superávit de 200-400 kcal/día. Post-entreno crítico: proteína + azúcares rápidos en menos de 30 min (momento clave (primeros 30 min post-entreno)).'},
+  resistencia:{hc:'60-70%',p:'12-15% · 1.2-1.6g/kg/día',g:'20-25%',nota:'Estrategia reservas de energía (glucógeno): pasta/arroz la noche anterior + desayuno rico en HC mañana de competición. Durante la carrera: 30-60g de carbohidratos/hora.'},
+  mixto:{hc:'55-65%',p:'15-20% · 1.4-1.8g/kg/día',g:'20-25%',nota:'Periodización nutricional: más HC los días de entreno intenso, menos en días de descanso. Proteína distribuida en 4-5 tomas de 20-40g.'},
+  amateur:{hc:'50-60%',p:'15-20% · 1.2-1.5g/kg/día',g:'25-30%',nota:'Con 1h/día de ejercicio moderado las necesidades no difieren mucho de la población general. Prioriza la calidad de los alimentos sobre los suplementos.'}
+};
+
+let curSys=0;
+
+function setSys(i){
+  curSys=i;
+  document.querySelectorAll('.sys-chip').forEach((c,j)=>c.classList.toggle('act',i===j));
+  const s=sysData[i];
+  document.getElementById('sys-detail').innerHTML=`
+    <div style="background:${s.color};border:0.5px solid ${s.tc}30;border-radius:var(--radius-lg);padding:.9rem 1.1rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:.5rem">
+        <span style="font-size:14px;font-weight:500;color:${s.tc}">${s.name}</span>
+        <span style="background:${s.tc}20;color:${s.tc};font-size:10px;padding:2px 7px;border-radius:6px;white-space:nowrap;font-weight:500">${s.dur}</span>
+      </div>
+      <p style="font-size:12px;color:${s.tc};margin-bottom:.3rem"><strong>Sustrato principal:</strong> ${s.sub}</p>
+      <p style="font-size:11px;color:${s.tc};opacity:.85;margin-bottom:.25rem"><strong>Ventajas:</strong> ${s.pros}</p>
+      <p style="font-size:11px;color:${s.tc};opacity:.85;margin-bottom:.25rem"><strong>Limitaciones:</strong> ${s.cons}</p>
+      <p style="font-size:11px;color:${s.tc};opacity:.85;margin-bottom:.25rem"><strong>Deportes tipo:</strong> ${s.ej}</p>
+      <p style="font-size:11px;color:${s.tc};font-weight:500"><strong>Nutrición:</strong> HC: ${s.hc} · Proteína: ${s.prot}</p>
+    </div>`;
+}
+
+function updD(){
+  const sp=dSports[document.getElementById('dsport').value];
+  document.getElementById('dmetrics').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:.5rem">
+      <div class="m"><div class="ml">Carbohidratos</div><div class="mv" style="font-size:16px">${sp.hc}</div></div>
+      <div class="m"><div class="ml">Proteína</div><div class="mv" style="font-size:16px">${sp.p.split('·')[0].trim()}</div></div>
+      <div class="m"><div class="ml">Grasas</div><div class="mv" style="font-size:16px">${sp.g}</div></div>
+    </div>
+    <div class="card card-accent" style="margin:0"><p style="font-size:12px;color:var(--text2)">${sp.nota}</p></div>`;
+}
+
+function loadProfile(){
+  const saved=localStorage.getItem('nutri_perfil');
+  if(saved){
+    try{
+      const d=JSON.parse(saved);
+      if(d.peso) document.getElementById('peso').value=d.peso;
+      if(d.talla) document.getElementById('talla').value=d.talla;
+      if(d.edad) document.getElementById('edad').value=d.edad;
+      if(d.sexo) document.getElementById('sexo').value=d.sexo;
+      if(d.act) document.getElementById('act').value=d.act;
+      if(d.obj) document.getElementById('obj').value=d.obj;
+    }catch(e){}
+  }
+  upd();
+}
+function upd(){
+  const p=+document.getElementById('peso').value;
+  const t=+document.getElementById('talla').value;
+  const e=+document.getElementById('edad').value;
+  const s=document.getElementById('sexo').value;
+  const a=+document.getElementById('act').value;
+  const o=+document.getElementById('obj').value;
+  document.getElementById('pv').textContent=p;
+  document.getElementById('tv').textContent=t;
+  document.getElementById('ev').textContent=e;
+  localStorage.setItem('nutri_perfil',JSON.stringify({peso:p,talla:t,edad:e,sexo:s,act:a,obj:o}));
+  const tmb=s==='h'?66.5+(13.75*p)+(5*t)-(6.75*e):65.5+(9.46*p)+(1.85*t)-(4.68*e);
+  const tdee=Math.round(tmb*a);
+  const target=tdee+o;
+  const imc=+(p/((t/100)**2)).toFixed(1);
+  const imcCat=imc<18.5?'Bajo peso':imc<25?'Normal':imc<30?'Sobrepeso':'Obesidad';
+  const prot=Math.round(p*1.7);
+  const carb=Math.round((target*0.55)/4);
+  const gras=Math.round((target*0.25)/9);
+  document.getElementById('metrics').innerHTML=`
+    <div class="m"><div class="ml">Kcal objetivo/día</div><div class="mv">${target}<span class="mu"> kcal</span></div></div>
+    <div class="m"><div class="ml">calorías que quemas al día estimado</div><div class="mv">${tdee}<span class="mu"> kcal</span></div></div>
+    <div class="m"><div class="ml">Proteína/día</div><div class="mv">${prot}<span class="mu"> g</span></div></div>
+    <div class="m"><div class="ml">Carbohidratos/día</div><div class="mv">${carb}<span class="mu"> g</span></div></div>
+    <div class="m"><div class="ml">Grasas/día</div><div class="mv">${gras}<span class="mu"> g</span></div></div>
+    <div class="m"><div class="ml">IMC · ${imcCat}</div><div class="mv">${imc}</div></div>`;
+  const hcp=Math.round(carb*4/target*100);
+  const pp=Math.round(prot*4/target*100);
+  const gp=Math.round(gras*9/target*100);
+  document.getElementById('macrodist').innerHTML=`
+    <div class="pl"><span>Carbohidratos (${hcp}%)</span><span>${carb}g · ${Math.round(carb*4)} kcal</span></div>
+    <div class="bwrap"><div class="bh" style="width:${hcp}%;background:#1D9E75"></div></div>
+    <div class="pl" style="margin-top:.4rem"><span>Proteína (${pp}%)</span><span>${prot}g · ${Math.round(prot*4)} kcal</span></div>
+    <div class="bwrap"><div class="bh" style="width:${pp}%;background:#378ADD"></div></div>
+    <div class="pl" style="margin-top:.4rem"><span>Grasas (${gp}%)</span><span>${gras}g · ${Math.round(gras*9)} kcal</span></div>
+    <div class="bwrap"><div class="bh" style="width:${gp}%;background:#BA7517"></div></div>`;
+}
+
+function updM(){
+  document.getElementById('fv').textContent=document.getElementById('fibra').value;
+  document.getElementById('vv').textContent=document.getElementById('verd').value;
+  document.getElementById('fev').textContent=document.getElementById('ferm').value;
+  document.getElementById('lv').textContent=document.getElementById('legu').value;
+  document.getElementById('uv').textContent=document.getElementById('ultra').value;
+  const fibra=+document.getElementById('fibra').value;
+  const verd=+document.getElementById('verd').value;
+  const ferm=+document.getElementById('ferm').value;
+  const legu=+document.getElementById('legu').value;
+  const ultra=+document.getElementById('ultra').value;
+  const anti=+document.getElementById('anti').value;
+  const estres=+document.getElementById('estres').value;
+  let score=0;
+  score+=Math.min(fibra/25*30,30);
+  score+=Math.min(verd/5*20,20);
+  score+=Math.min(ferm/7*20,20);
+  score+=Math.min(legu/4*15,15);
+  score-=ultra*3; score-=anti*8; score-=estres*5;
+  score=Math.max(0,Math.min(100,Math.round(score)));
+  const cat=score>=75?['Buena diversidad microbiana','bg']:score>=50?['Diversidad moderada','ba']:['Posible disbiosis','br'];
+  const tips=[];
+  if(fibra<25)tips.push('Aumenta la fibra a 25-30g/día. En Colombia lo más fácil: frijoles, avena, yuca enfriada, papa criolla enfriada, guayaba y verduras variadas.');
+  if(verd<5)tips.push('Intenta comer 5 porciones de verdura al día: ahuyama, habichuela, espinaca, zanahoria, pepino cohombro, remolacha. Varía los colores.');
+  if(ferm<3)tips.push('Incluye 1 fermentado cada día: kumis natural sin azúcar, yogur vivo, o repollo fermentado casero con sal (fácil de hacer en casa).');
+  if(legu<3)tips.push('Come frijoles, lentejas, arvejas o habas 3-4 veces por semana. Son el mejor alimento para tus bacterias buenas del intestino.');
+  if(ultra>2)tips.push('Reduce los ultraprocesados: paquetes, gaseosas, salchichas, galletas de paquete. Contienen sustancias que dañan el recubrimiento del intestino.');
+  if(anti>0)tips.push('Después de antibióticos: toma kumis o yogur natural sin azúcar todos los días durante 60 días para recuperar tus bacterias buenas.');
+  if(estres>1)tips.push('El estrés crónico daña el intestino tanto como la mala alimentación. Caminar, dormir bien y respirar profundo también curan el intestino.');
+  document.getElementById('micro-result').innerHTML=`
+    <div class="card">
+      <div class="score-num">${score}<span style="font-size:18px">/100</span></div>
+      <div class="score-lbl"><span class="badge ${cat[1]}">${cat[0]}</span></div>
+      ${tips.length?`<h4 style="margin-top:.75rem">Prioridades según el libro</h4><ul style="list-style:none;padding:0">${tips.map(t=>`<li style="font-size:12px;color:var(--text2);padding:.35rem 0;border-bottom:0.5px solid var(--border);display:flex;gap:7px;align-items:flex-start"><i class="ti ti-arrow-right" style="flex-shrink:0;color:#1D9E75;font-size:14px;margin-top:1px"></i>${t}</li>`).join('')}</ul>`:'<p style="font-size:12px;color:#1D9E75;margin-top:.75rem;text-align:center">¡Microbiota bien cuidada! Mantén estos hábitos.</p>'}
+    </div>`;
+}
+
+const planData={
+  microbiota:[
+    {dia:'Lunes — Intestino + Bocachico',comidas:[
+      {t:'Desayuno',i:'Avena en agua 80g + banano maduro + chía 15g en remojo + kumis 150ml al lado · Fibra + bacterias buenas desde la mañana'},
+      {t:'Almuerzo',i:'Bocachico a la plancha 180g (pescado del Magdalena, fácil de digerir) + frijoles rojos bien cocidos 120g + arroz integral enfriado + ahuyama cocida · Cebolla y ajo solo cocinados'},
+      {t:'Merienda',i:'Guayaba entera con cáscara 2 unidades + maní natural tostado sin sal 25g · Pectinas que alimentan las bacterias buenas'},
+      {t:'Cena',i:'Huevos revueltos 3 + espinaca salteada con aceite de coco + aguacate · Cena liviana, sin irritar el colon'}
+    ]},
+    {dia:'Martes — Intestino + Pollo',comidas:[
+      {t:'Desayuno',i:'Yogur natural sin azúcar 200g + moras o uchuvas 80g + maní 20g + miel de abejas cruda 1 cucharadita · Bacterias vivas + antioxidantes'},
+      {t:'Almuerzo',i:'Pechuga de pollo a la plancha 160g + lentejas 120g bien cocidas + papa criolla enfriada (almidón resistente) + habichuela al vapor + comino y cilantro · Sin pimentón'},
+      {t:'Merienda',i:'Chía 15g en remojo con agua de panela + guayaba o mora · Gel de chía protege el recubrimiento del intestino'},
+      {t:'Cena',i:'Sardinas en agua 120g escurridas + yuca cocida y enfriada + ensalada de pepino cohombro con limón · Omega-3 que calma la inflamación del intestino'}
+    ]},
+    {dia:'Miércoles — Intestino + Trucha',comidas:[
+      {t:'Desayuno',i:'Colada de avena con canela y guayaba cocida · La guayaba cocinada suelta las pectinas que alimentan tus bacterias buenas · Agregar chía al final'},
+      {t:'Almuerzo',i:'Trucha a la plancha 180g (la mejor fuente de omega-3 en Huila, de las partes frías) + arroz integral 80g + brócoli o habichuela al vapor + zanahoria cocida'},
+      {t:'Merienda',i:'Arvejas cocidas con limón 100g + aguacate Hass · Fibra de legumbre + grasa buena para las hormonas'},
+      {t:'Cena',i:'Sopa liviana de pollo 150g con zanahoria, papa criolla y cilantro · Fácil de digerir, reconfortante para el colon irritable · Kumis 150ml después'}
+    ]},
+    {dia:'Jueves — Intestino + Res (zinc)',comidas:[
+      {t:'Desayuno',i:'3 huevos enteros revueltos + espinaca salteada + tomate chonto + avena en agua 50g · Los huevos enteros con yema son la mejor grasa para tus bacterias y tus hormonas'},
+      {t:'Almuerzo',i:'Carne de res magra (lomito o murillo) 160g a la plancha + frijoles negros bien cocidos 120g + ñame cocido y enfriado + ensalada de zanahoria rallada · La res tiene zinc natural para la testosterona'},
+      {t:'Merienda',i:'Kumis natural 200ml + guayaba + semillas de auyama 20g (pepitas verdes = zinc) · El mejor snack para la testosterona'},
+      {t:'Cena',i:'Bagre al vapor 160g + papa criolla + habichuela cocida + cilantro · Pescado del Magdalena, económico y fácil de digerir'}
+    ]},
+    {dia:'Viernes — Intestino + Hígado (hierro y B12)',comidas:[
+      {t:'Desayuno',i:'Avena en agua 80g + banano + linaza molida 1 cucharada + kumis 150ml · La linaza hace un gel que protege el colon'},
+      {t:'Almuerzo',i:'Hígado de res encebollado 150g (sin pimentón, solo cebolla cocinada bien + comino + cilantro) + arroz blanco 100g + zanahoria y ahuyama cocidas · El hígado es la mejor fuente de hierro y vitamina B12 = energía real'},
+      {t:'Merienda',i:'Moras o uchuvas 100g + maní 25g · Antioxidantes + grasa saludable'},
+      {t:'Cena',i:'Mojarra roja a la plancha 170g (del embalse de Betania) + yuca enfriada + ensalada de repollo rallado con limón · El repollo con limón fermenta suavemente y cuida el intestino'}
+    ]}
+  ],
+  diarrea:[{dia:'🟡 PROTOCOLO DIARREA AGUDA — Día de Colon Alterado',comidas:[
+      {t:'⚠ Señales que activan este protocolo',i:'Diarrea líquida (especialmente amarilla) · Muchos gases · Cólicos · Náuseas · Heces con moco · Aplica este plan el día que amaneces así — sin importar si es día de entreno'},
+      {t:'🚫 Lo que NO consumes hoy',i:'❌ Mass Gainer ni leche de vaca · ❌ Omega-3, Creatina, Totalmax — omitirlos hoy · ❌ Frutas ácidas (naranja, limón en exceso) · ❌ Verduras crudas · ❌ Legumbres (frijoles, lentejas) · ❌ Aceites en exceso · ❌ Café · ❌ Cualquier cosa frita'},
+      {t:'💧 Al despertar — Hidratación PRIMERO',i:'Agua de arroz: hierve arroz blanco en el doble de agua, toma el líquido tibio con pizca de sal y panela raspada · Esto repone electrolitos sin irritar nada · Tomar antes de cualquier suplemento o medicamento'},
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua tibia · Kéfir va con el desayuno · NO tomar nada más por ahora'},
+      {t:'6:00 · Esmecta',i:'💊 Esmecta 1 sobre disuelto en agua — SOLA · Esperar mínimo 2 horas antes de tomar cualquier otro medicamento o suplemento · La Esmecta recubre el intestino y para la diarrea'},
+      {t:'6:15 · Desayuno MUY liviano',i:'Banano maduro aplastado (repone potasio) + arroz blanco bien cocido 80g · 1 huevo duro o pochado — no frito, sin aceite · Zanahoria pelada y bien cocida · Kéfir 100ml (pequeña cantidad, con comida) · Sin aceite, sin cúrcuma, sin especias hoy'},
+      {t:'8:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con vaso de agua — mínimo 2h después de la Esmecta · ⚡ MUY IMPORTANTE hoy: la diarrea amarilla líquida es señal de que las sales biliares no se están absorbiendo — la colestiramina las atrapa · Sin esta dosis la diarrea puede seguir todo el día · ⚠ ORDEN CRÍTICO: el Liv.52 siempre PRIMERO (5:35), la colestiramina siempre DESPUÉS — nunca al revés ni juntos · La colestiramina se pega a todo lo que encuentra y bloquea la absorción de cualquier suplemento o medicamento cercano'},
+      {t:'9:00 · Hidratación continua',i:'Agua de panela tibia + pizca de sal + limón (suero casero) · Tomar poco a poco durante la mañana · Objetivo: reponer todo el líquido y electrolitos perdidos · Si hay mareo o debilidad fuerte: acostarse y hidratarse, no entrenar'},
+      {t:'11:00 · Media mañana',i:'Papa criolla pelada y bien cocida 1-2 unidades · Agua de arroz si aún hay diarrea · Colágeno NucleVit si el estómago lo tolera — si no, omitirlo hoy'},
+      {t:'12:30 · Almuerzo',i:'Caldo de pollo sin grasa + pollo desmenuzado 120g bien cocido + arroz blanco 80g + zanahoria pelada y cocida + papa criolla · Todo hervido o al vapor — sin aceite, sin especias fuertes, sin pimentón · Comer despacio y en poca cantidad'},
+      {t:'13:30 · 2ª Esmecta si sigue la diarrea',i:'💊 Esmecta 1 sobre — solo si la diarrea no ha parado · Siempre sola, 2h alejada de todo · Máximo 3 sobres al día'},
+      {t:'15:00 · Merienda',i:'Banano maduro · Papa criolla pequeña cocida · Agua de panela tibia · 💊 Creatina 5g — esta sí se puede tomar, no irrita · Maní natural 15g si el estómago aguanta'},
+      {t:'19:00 · Cena',i:'Sopa liviana: caldo de pollo + arroz blanco 60g + papa criolla + zanahoria + cilantro · Pollo desmenuzado 100g · Todo muy bien cocido · Kéfir 100ml con la cena · Sin aceite, sin cúrcuma hoy'},
+      {t:'20:00 · Antes de dormir',i:'💊 Colestiramina DOSIS 2 — sola con agua · 💊 Magnesio glicinato 300mg — calma el colon · 💊 Resveratrol solo si el estómago lo tolera, si no omítelo esta noche'},
+      {t:'🏊 ¿Entreno hoy?',i:'Si hay diarrea activa, fiebre o debilidad: NO entrenar · Si solo hay molestia leve y ya cedió la diarrea: máximo una caminata suave o descanso total · No perderás fitness por un día — sí te puedes lesionar o deshidratar si fuerzas el cuerpo'},
+      {t:'📞 Cuándo llamar al médico',i:'Si la diarrea dura más de 48 horas · Si aparece sangre en las heces · Si hay fiebre mayor de 38°C · Si hay mareo fuerte o no puedes tomar líquidos · Si dudas sobre si tomar la Rifaximin — esa decisión es solo del médico que te la recetó'}
+    ]}],
+  crisis:[
+    {dia:'🔴 PROTOCOLO CRISIS COLON IRRITABLE',comidas:[
+      {t:'⚠ Lee esto primero',i:'Durante la crisis: come SOLO los alimentos de este protocolo. Nada de frijoles, legumbres, avena con mucha fibra, verduras crudas, grasas fritas ni edulcorantes artificiales. El kéfir SÍ — las bacterias vivas calman el colon.'},
+      {t:'Medicamentos — Horarios CRÍTICOS',i:'Rifaximin 550mg: cada 8 horas CON comida (ej: 6am · 2pm · 10pm) · Esmecta: tomar SOLA 2 horas antes o 2 horas después de cualquier suplemento o medicamento — no mezclar · Trimebutina + Simeticona: una en cada comida principal · Colestiramina (si la tomas): 4-6 horas separada de TODOS los suplementos — si no respetas esto, bloquea la absorción de omega-3, vitaminas y colágeno'},
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno (bacterias vivas que calman el colon irritado — tómalo aunque tengas diarrea, ayuda a recuperar la flora)'},
+      {t:'6:00',i:'Colágeno NucleVit en medio vaso de agua tibia (no jugo ácido durante la crisis — puede irritar más)'},
+      {t:'6:15 · Desayuno liviano',i:'Arroz blanco bien cocido 100g + banano maduro 1 unidad · Mass Gainer 1 scoop en leche de vaca (si el estómago lo tolera) o en agua si hay mucha diarrea · 💊 Rifaximin 1 tableta (primera dosis)'},
+      {t:'8:00 · Media mañana',i:'💊 Esmecta 1 sobre disuelto en agua (2h después del desayuno y suplementos) · Agua de coco natural o suero oral — reponer lo que se pierde con la diarrea'},
+      {t:'12:00 · Almuerzo',i:'Pollo a la plancha 150g (sin condimentos fuertes, solo sal) + arroz blanco 120g + papa criolla cocida sin cáscara + caldo de pollo liviano · 💊 Rifaximin 1 tableta (segunda dosis) · 💊 Trimebutina + Simeticona · Esperar 2h antes de tomar Omega-3'},
+      {t:'14:00',i:'💊 Omega-3 (3 cápsulas) — 2 horas después del almuerzo para evitar que interfiera con la Esmecta · Nuez del Brasil 2 nueces (no más — el selenio ayuda a recuperar)'},
+      {t:'15:00 · Merienda',i:'Banano maduro + Mass Gainer 1 scoop en agua (no leche durante diarrea intensa) + Creatina 5g · Mantener la creatina aunque no entrenes — es de saturación diaria'},
+      {t:'19:00 · Cena',i:'Caldo de pollo con arroz 80g + papa criolla + zanahoria cocida · Pollo desmenuzado 120g · Mass Gainer 1 scoop en agua · 💊 Rifaximin 1 tableta (tercera dosis) · 💊 Trimebutina + Simeticona'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel (siempre de noche) · 💊 Magnesio glicinato 300mg · Kéfir 100ml si el estómago lo permite · El sueño es cuando el intestino se repara — dormir mínimo 8 horas'},
+      {t:'⚠ NO entrenes durante la crisis',i:'El cuerpo necesita toda su energía para combatir la inflamación intestinal. Máximo caminata suave. Retomar los entrenos 24-48h después de que cese la diarrea. Cuando termines el ciclo de Rifaximin: kéfir todos los días por 60 días para recuperar las bacterias que el antibiótico eliminó.'}
+    ]}
+  ],
+  deporte:[
+    {dia:'Lunes — Run Z2 · 50 min',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · El kéfir va con el desayuno, NO en ayunas — el ácido del estómago vacío mata las bacterias'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en medio vaso de jugo de guayaba natural (la vitamina C de la guayaba mejora la absorción del colágeno hasta un 40%)'},
+      {t:'6:15 · Desayuno',i:'Avena en agua 80g + 2 huevos fritos en aceite de aguacate + banano maduro + canela · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · Nuez del Brasil 3-4 nueces · Un chorrito de aceite de oliva extra virgen'},
+      {t:'7:45 · Run Z2 50 min',i:'Solo agua · Z2 quema principalmente grasas — no necesita azúcar si dura menos de 60 min · Si sudas mucho en el calor de Neiva: agua con pizca de sal y panela raspada'},
+      {t:'8:40 · Post-run ⚡ (primeros 30 min)',i:'Banano + Mass Gainer SNP 1 scoop en leche de vaca · Recuperación liviana — el Lunes es entreno moderado'},
+      {t:'10:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento o medicamento cercano · 3-4h después del desayuno y 2h antes del almuerzo es la mejor ventana disponible'},
+      {t:'11:00 · Snack media mañana',i:'Uchuvas frescas 100g (vitamina C + antioxidantes que el triatleta necesita) + maní natural tostado 25g (grasa buena + proteína + zinc para testosterona) · Las uchuvas son una de las frutas más completas para deportistas — fáciles de llevar en bolsita'},
+      {t:'12:30 · Almuerzo',i:'Trucha a la plancha 180g con aceite de aguacate + cúrcuma + pimienta negra · Frijoles bien cocidos 120g + arroz integral enfriado + zanahoria cocida · Sin pimentón · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado)'},
+      {t:'13:15 · Infusión post-almuerzo',i:'Infusión de cúrcuma + jengibre fresco + limón · Hervir agua, rallare un trozo de jengibre + 1 cucharadita de cúrcuma + limón · Calma el colon, antiinflamatoria para los músculos · Tomar todos los días después del almuerzo'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 3-4 dátiles deshidratados + yogur natural 150g · Los dátiles son energía natural perfecta a esta hora'},
+      {t:'19:30 · Cena',i:'3 huevos enteros con espinaca salteada en aceite de oliva extra virgen + aguacate + papa criolla enfriada · Kéfir 150ml después'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel (SIEMPRE de noche) · 💊 Magnesio glicinato 300mg · El 95% de la testosterona se produce mientras duermes'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio es lo mejor que permite este horario'}
+    ]},
+    {dia:'Martes — ⚡ Bici Race Pace 4×10 min + Brick run Z1 20 min · DÍA DURO',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno CARGADO',i:'Arroz blanco 80g con aceite de aguacate + 3 huevos revueltos con pollo desmenuzado 50g + banano grande · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml con el desayuno · 💊 Totalmax (solo días duros) · Nuez del Brasil 3-4 nueces'},
+      {t:'7:45 · Bici VO2max — 5×4 min Z4',i:'Combustible en botella: agua de panela + sal + limón · ALTERNATIVAS que puedes llevar: 3-4 dátiles deshidratados (energía natural inmediata, fácil de comer pedaleando) o 1 bocadillo veleño partido en trozos (panela + guayaba = azúcar rápida + pectina) · Objetivo 40-50g de azúcar/hora · ⚠ Los Aminos Simply tienen sucralosa que irrita el colon — usa dátiles o panela en su lugar'},
+      {t:'~9:00 · Entre bici y run',i:'Banano maduro + agua · El run Z1 es suave — no necesitas más'},
+      {t:'~9:30 · Post-run ⚡ CRÍTICO (primeros 30 min)',i:'Arroz blanco 150g + pollo 180g + mango · DÍA DURO = reponer energía AHORA es lo más importante de todo el día · Mass Gainer SNP adicional si puedes'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento o medicamento cercano · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:30 · Snack media mañana',i:'Yogur natural 150g + 3 dátiles deshidratados + semillas de auyama 15g · Las semillas de auyama son ricas en zinc — uno de los minerales más importantes para la testosterona y que más se pierde sudando en Neiva · Los dátiles dan energía rápida para la tarde'},
+      {t:'12:30 · Almuerzo',i:'Carne de res magra 160g + lentejas 120g bien cocidas + yuca enfriada + zanahoria · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · Semillas de auyama 20g (zinc para testosterona)'},
+      {t:'19:30 · Cena',i:'Bocachico o sardinas 160g + papa criolla enfriada + pepino con limón · Kéfir 150ml'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio glicinato 300mg · Dormir mínimo 8 horas — el músculo se reconstruye de noche'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio es lo mejor que permite este horario'}
+    ]},
+    {dia:'Miércoles — ⚡ Run Race Pace 5×1 km · DÍA DURO',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno CARGADO',i:'Avena en agua 100g + tortilla de 2 huevos con espinaca y cebolla + banano grande + panela 1 cucharadita · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · 💊 Totalmax · Nuez del Brasil 3-4 nueces'},
+      {t:'7:45 · Run VO2max — 6×800m Z4',i:'Si el total supera 60 min: lleva 2-3 dátiles deshidratados en el bolsillo — energía inmediata fácil de consumir corriendo · O agua de panela con sal en botellita pequeña · Los 800m en Z4 vacían el glucógeno muy rápido'},
+      {t:'8:50 · Post-run ⚡ (primeros 30 min)',i:'Arroz blanco 150g + 3 huevos o pollo 180g con aceite de aguacate + banano · CRÍTICO: los 6×800m dejan las reservas de energía del músculo completamente vacías · Si no tienes arroz: Mass Gainer SNP inmediato'},
+      {t:'10:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento o medicamento cercano · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:00 · Snack media mañana',i:'Uchuvas 100g + 1 bocadillo veleño + maní 20g · Día duro = más calorías necesarias entre comidas · Las uchuvas con el bocadillo de guayaba = vitamina C + azúcar natural + pectina prebiótica'},
+      {t:'12:30 · Almuerzo',i:'Hígado de res 150g encebollado con aceite de oliva extra virgen (sin pimentón) + arroz blanco 100g + ahuyama y zanahoria cocidas con cúrcuma · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Comer guayaba o bocadillo veleño de postre — la vitamina C y la guayaba ayudan a absorber el hierro del hígado'},
+      {t:'13:15 · Infusión post-almuerzo',i:'Cúrcuma + jengibre fresco rallado + limón hervidos 5 min · Hábito diario — antiinflamatoria para el intestino y los músculos'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 3-4 dátiles deshidratados + maní natural 25g · Los dátiles dan energía sostenida para la tarde'},
+      {t:'19:30 · Cena',i:'Trucha al horno con cúrcuma + jengibre + aceite de oliva 180g + papa criolla + espinaca cocida · Kéfir 150ml · La cúrcuma con pimienta negra multiplica su efecto antiinflamatorio'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio glicinato 300mg'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio es lo mejor que permite este horario'}
+    ]},
+    {dia:'Jueves — Nado Race Pace · 3200 m',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno',i:'Avena en agua 80g + 2 huevos tibios (pasados por agua 5 min) + banano + chía 15g remojada · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · Nuez del Brasil 3-4 nueces · Un chorrito de aceite de oliva extra virgen'},
+      {t:'7:45 · Nado umbral — 2800m',i:'Agua sola en el borde de la piscina · Si supera 70 min: agua de panela con sal + limón antes de entrar · El agua fría aumenta el gasto calórico — la natación quema más de lo que parece'},
+      {t:'8:50 · Post-nado ⚡ (primeros 30 min)',i:'Mass Gainer SNP 1 scoop en leche de vaca + arroz blanco 120g + mango o banano · O 4-5 dátiles deshidratados si no tienes arroz a mano'},
+      {t:'10:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento o medicamento cercano · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:00 · Snack media mañana',i:'Maracuyá 2 unidades con panela raspada (vitamina C + antioxidantes + azúcar natural de panela) + semillas de auyama 20g · El maracuyá es una de las frutas más ricas en vitamina C del Huila — refuerza el sistema inmune del triatleta'},
+      {t:'12:30 · Almuerzo',i:'Pollo a la plancha 170g con aceite de aguacate + cúrcuma + comino · Frijoles cargamanto 120g bien cocidos + ñame enfriado + habichuela al vapor · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
+      {t:'13:15 · Infusión',i:'Cúrcuma + jengibre fresco + limón hervidos 5 min · Hábito diario post-almuerzo — calma el colon y reduce inflamación muscular'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 2 bocadillos veleños + yogur natural 150g + moras · Los bocadillos son energía rápida de guayaba + panela perfecta para la tarde'},
+      {t:'19:30 · Cena',i:'Mojarra o cachama del Betania 170g a la plancha con aceite de oliva + cúrcuma · Yuca enfriada + pepino con limón y cilantro · Kéfir 150ml con la cena'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio glicinato 300mg'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio es lo mejor que permite este horario'}
+    ]},
+    {dia:'Viernes — Nado Z2 3000m + Run Z2 35 min · DÍA DOBLE',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno — más carbos hoy',i:'Avena en agua 100g + 2 huevos revueltos con atún en agua 60g + banano + guayaba · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · Nuez del Brasil 3-4 nueces · Día doble = necesitas más energía desde la mañana'},
+      {t:'7:45 · Nado Z2 — 3000m (~70 min)',i:'Agua sola · Z2 usa principalmente grasas · Llevar 2 dátiles deshidratados por si el nado se extiende más de 75 min'},
+      {t:'~9:00 · Entre nado y run',i:'Banano maduro + agua de panela con sal · 30 min de descanso si puedes · El bocadillo veleño también funciona aquí — azúcar rápida de guayaba antes del run'},
+      {t:'~9:30 · Post-run ⚡ (primeros 30 min)',i:'Arroz blanco 130g con aceite de aguacate + pollo 170g + banano · Día doble = reservas muy bajas — no saltar esta comida'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento o medicamento cercano · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:00 · Snack media mañana',i:'Uchuvas 100g + aguacate pequeño + guayaba 1 unidad · Día doble = más calorías necesarias · El aguacate aporta grasa buena que ayuda a producir testosterona — comerlo a media mañana no interfiere con el entreno de la tarde · Las uchuvas + guayaba = doble dosis de vitamina C'},
+      {t:'12:30 · Almuerzo',i:'Bagre al vapor 170g con aceite de oliva extra virgen + cúrcuma · Lentejas 120g + papa criolla enfriada + zanahoria cocida · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
+      {t:'13:15 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Hoy más que nunca — día doble genera más inflamación muscular · El jengibre también calma el intestino antes del brick del sábado'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 3-4 dátiles + guayaba 2 unidades + maní 25g'},
+      {t:'19:30 · Cena — PRE-CARGA SÁBADO 🔴',i:'Arroz blanco 200g + pollo 150g o carne res con aceite de aguacate + zanahoria cocida con cúrcuma · 1 bocadillo veleño de postre — azúcar natural de guayaba que se almacena como energía para mañana · Mass Gainer SNP 1 scoop en leche · Kéfir 150ml · Esta cena ES la carga para el día más duro de la semana'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio glicinato 300mg · Dormir 8-9 horas obligatorio — el brick del sábado lo necesita'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio es lo mejor que permite este horario'}
+    ]},
+    {dia:'Sábado — 🔴 Nado Z2 + sprint finish 3500m + Bici largo con brick 2h 30min + 25 min run · DÍA MÁXIMO',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno MÁXIMO — no salir sin esto',i:'Arroz blanco 200g con aceite de aguacate + tortilla de 3 huevos con pollo desmenuzado 80g + banano grande · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml con el desayuno · 💊 Totalmax · Esta es la comida más importante de la semana'},
+      {t:'7:45 · Nado Z2 — 3200m',i:'Agua sola · Hidratarse bien antes de entrar · El Z2 largo construye base aeróbica'},
+      {t:'~9:15 · Transición nado → brick',i:'Banano grande + agua de panela con sal + limón · ESTO ES TU PRE-BRICK · Alternativa: 3-4 dátiles deshidratados + agua de panela — energía inmediata y sostenida · El brick empieza con glucógeno a medias, necesitas azúcar ahora'},
+      {t:'~9:30 · Durante brick Bici+Run — 160 min 🚴🏃',i:'CADA 20 MIN: agua de panela + sal + limón · Cada 45 min: banano O 3 dátiles deshidratados O 1 bocadillo veleño partido — llevar todo en el bolsillo del uniforme · Objetivo: 60g de azúcar/hora · Mochila/bolsillos: 2 bananos + 2 dátiles + 1 bocadillo + 2 botellas de panela · Sin esto los últimos 40 min el cuerpo quema músculo'},
+      {t:'~12:10 · Post-brick ⚡⚡ URGENTE (primeros 30 min)',i:'Arroz blanco 200g con aceite de aguacate + pollo 200g o 4 huevos + mango + banano · HOY DOBLA TODO — el cuerpo está al límite · Mass Gainer SNP 1-2 scoops en leche de vaca · 💊 Creatina 5g'},
+      {t:'13:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — hoy el entreno termina tarde, esta es la mejor ventana · ⚠ Bloquea cualquier suplemento cercano · 1h después del post-brick y 1h antes del almuerzo de las 14:30'},
+      {t:'14:30 · Almuerzo',i:'Trucha 200g a la plancha con aceite de oliva extra virgen + cúrcuma + pimienta negra · Frijoles 150g bien cocidos + yuca enfriada + aguacate · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
+      {t:'15:30 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Hoy es el día que más la necesitas — 4+ horas de entreno generan mucha inflamación · Esta infusión acelera la recuperación'},
+      {t:'17:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca · Yogur natural + moras + 2 bocadillos veleños · Nuez del Brasil 3-4 nueces'},
+      {t:'20:00 · Cena',i:'Carne de res magra 180g a la plancha con aceite de aguacate + arroz blanco 150g + espinaca cocida con cúrcuma + zanahoria · Kéfir 150ml con la cena'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio glicinato 400mg (dosis extra hoy por el esfuerzo) · Dormir 9 horas si puedes'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio es lo mejor que permite este horario'}
+    ]},
+    {dia:'Domingo — 🔵 Bici Z2 endurance · 90 min · Recuperación',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno · El cuerpo sigue recuperándose del sábado'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno liviano',i:'Avena en agua 70g + 2 huevos pochados (en agua con vinagre) + banano + miel de abejas 1 cucharadita + maní 20g · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · Nuez del Brasil 3-4 nueces · Un chorrito de aceite de oliva sobre la avena'},
+      {t:'7:45 · Bici Z2 — 70 min',i:'Agua sola o con panela raspada + pizca de sal · Z2 endurance quema principalmente grasas · Llevar 2 dátiles por si sientes bajón de energía · Hidratarse bien antes — Neiva tiene mucho calor'},
+      {t:'9:00 · Post-bici ⚡ (primeros 30 min)',i:'Banano + Mass Gainer SNP 1 scoop en leche de vaca · Recuperación liviana — el domingo es para recuperar, no para agotar'},
+      {t:'10:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento o medicamento cercano · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:00 · Snack media mañana',i:'Guayaba 2 unidades + maní natural 25g + yogur natural 100g · Domingo = día de recuperación total · La guayaba tiene más vitamina C que la naranja y ayuda a sintetizar colágeno para las articulaciones · El maní + yogur = proteína + grasa que sostiene la energía sin picos'},
+      {t:'12:30 · Almuerzo',i:'Bocachico o bagre 170g al vapor con aceite de oliva extra virgen + cúrcuma · Lentejas 120g + ñame enfriado + zanahoria cocida · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
+      {t:'13:15 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Domingo es el día de recuperación total — esta infusión cierra la semana antiinflamatoria'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 1 bocadillo veleño + yogur natural + guayaba + semillas de auyama 20g · El bocadillo da energía natural de guayaba para recuperar'},
+      {t:'19:30 · Cena',i:'2 huevos + aguacate con aceite de aguacate + yuca o papa criolla enfriada + pepino con limón · Kéfir 150ml con la cena · Cena liviana para no cargar el intestino'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio glicinato 300mg · La cena del domingo y el sueño de esta noche determinan cómo arrancas el lunes'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio es lo mejor que permite este horario'}
+    ]}
+  ],
+  deporte2:[
+    {dia:'Lunes — Run Z2 · 55 min · SEMANA 2',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno',i:'Arepa de maíz + 2 huevos pericos (revueltos con tomate chonto, cebolla y cilantro) + banano · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · Nuez del Brasil 3-4 nueces · Aceite de oliva extra virgen sobre la arepa'},
+      {t:'7:45 · Run Z2 — 55 min',i:'Solo agua · Z2 quema principalmente grasas — no necesita azúcar si dura menos de 60 min · Si sudas mucho en el calor de Neiva: agua con pizca de sal y panela raspada'},
+      {t:'8:45 · Post-run ⚡ (primeros 30 min)',i:'Banano grande + Mass Gainer SNP 1 scoop en leche de vaca · Recuperación liviana — Lunes es entreno moderado'},
+      {t:'10:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento cercano'},
+      {t:'11:00 · Snack media mañana',i:'Moras frescas 100g + yogur natural 150g + maní 20g · Las moras son antiinflamatorias naturales — perfectas para recuperar después del run · El yogur suma bacterias buenas a las del kéfir del desayuno'},
+      {t:'12:30 · Almuerzo',i:'Cachama al vapor 180g con aceite de oliva + cúrcuma · Quinua 80g + remolacha cocida + habichuela al vapor · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle · Sin pimentón'},
+      {t:'13:15 · Infusión post-almuerzo',i:'Cúrcuma + jengibre fresco + limón hervidos 5 min · Hábito diario — antiinflamatoria para el intestino y los músculos'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · Yogur natural 150g + 1 bocadillo veleño + guayaba'},
+      {t:'19:30 · Cena',i:'Sopa liviana de pollo 150g + papa criolla + zanahoria + cilantro · Kéfir 150ml · Fácil de digerir, reconfortante para el colon'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel (SIEMPRE de noche) · 💊 Magnesio glicinato 300mg'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas)'}
+    ]},
+    {dia:'Martes — ⚡ Bici Race Pace 4×10 min + Brick run Z1 20 min · DÍA DURO · SEMANA 2',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno CARGADO',i:'Arepa de chócolo + 3 huevos revueltos con carne desmechada 80g + banano grande · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · 💊 Totalmax (solo días duros) · Nuez del Brasil 3-4 nueces'},
+      {t:'7:45 · Bici Race Pace — 4×10 min a potencia de carrera',i:'Combustible: agua de panela + sal + limón · Dátiles deshidratados 3-4 unidades en el bolsillo para los intervalos · Race Pace vacía el glucógeno muy rápido — no salgas sin combustible · ⚠ Aminos Simply tienen sucralosa que irrita el colon — usa dátiles o panela'},
+      {t:'~9:15 · Entre bici y brick run',i:'Banano + agua de panela · El run Z1 es suave — no necesitas más'},
+      {t:'~9:40 · Post-run ⚡ CRÍTICO (primeros 30 min)',i:'Arroz blanco 150g + carne de res magra 180g + mango · DÍA DURO = reponer energía AHORA · Mass Gainer SNP adicional si puedes'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:30 · Snack media mañana',i:'Uchuvas 100g + 1 bocadillo veleño · Día duro = más calorías entre comidas · Las uchuvas tienen vitamina K y fósforo que el músculo necesita después de los intervalos de Race Pace · El bocadillo da azúcar natural rápida de guayaba + panela'},
+      {t:'12:30 · Almuerzo',i:'Cerdo magro a la plancha 160g con aceite de aguacate + cúrcuma · Frijoles cargamanto 120g + plátano maduro cocido · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
+      {t:'13:15 · Infusión',i:'Cúrcuma + jengibre + limón · Día duro = más inflamación muscular = más necesaria'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · Semillas de auyama 20g (zinc natural para testosterona) + yogur natural 100g'},
+      {t:'19:30 · Cena',i:'Trucha al horno 160g con cúrcuma + aceite de oliva · Papa criolla enfriada + espinaca cocida · Kéfir 150ml'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio glicinato 300mg · Dormir mínimo 8 horas'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas)'}
+    ]},
+    {dia:'Miércoles — ⚡ Run Race Pace 5×1 km · DÍA DURO · SEMANA 2',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno CARGADO',i:'Changua: 1 taza de leche de vaca caliente + 2 huevos escalfados + cilantro + cebolla + arepa pequeña · Mass Gainer SNP 1 scoop en leche · Kéfir 150ml · 💊 Totalmax · Banano · Nuez del Brasil 3-4 nueces'},
+      {t:'7:45 · Run Race Pace — 5×1 km a ritmo de carrera',i:'Llevar 2-3 dátiles en el bolsillo — los kilómetros a race pace vacían el glucógeno rápido · Si el total pasa de 60 min: agua de panela con sal en botellita pequeña · Race pace = esfuerzo máximo sostenido'},
+      {t:'8:50 · Post-run ⚡ (primeros 30 min)',i:'Arroz blanco 150g + 3 huevos fritos en aceite de aguacate + banano · CRÍTICO: los 5×1km dejan el músculo muy exigido — reponer AHORA'},
+      {t:'10:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:00 · Snack media mañana',i:'Maracuyá 2 unidades con panela + semillas de auyama 20g + maní 15g · El maracuyá es fibra + vitamina C sin irritar el colon · Las semillas de auyama son de las mejores fuentes de zinc para testosterona disponibles en Neiva · Día duro = no llegar vacío al almuerzo'},
+      {t:'12:30 · Almuerzo',i:'Hígado de res 150g encebollado con aceite de oliva (sin pimentón) + arroz blanco 100g + ahuyama cocida con cúrcuma + habichuela · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · El hígado = fuente de hierro, zinc y vitamina B12 para la energía'},
+      {t:'13:15 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Hábito diario post-almuerzo'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 4 dátiles deshidratados + maní natural 25g'},
+      {t:'19:30 · Cena',i:'Bocachico al vapor 160g con aceite de oliva + cúrcuma · Yuca enfriada + pepino con limón y cilantro · Kéfir 150ml'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio glicinato 300mg'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas)'}
+    ]},
+    {dia:'Jueves — Nado Race Pace · 3200 m · SEMANA 2',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno',i:'Avena en leche de vaca 80g + 2 huevos tibios (pasados por agua 5 min) + banano + chía remojada 10g + panela 1 cucharadita · Mass Gainer SNP 1 scoop en leche · Kéfir 150ml · Nuez del Brasil 3-4 nueces'},
+      {t:'7:45 · Nado Race Pace — 3200m',i:'Agua sola en el borde de la piscina · Race pace en natación = esfuerzo alto sostenido — el agua fría aumenta el gasto calórico más de lo que parece · Si el entreno supera 70 min: agua de panela con sal antes de entrar'},
+      {t:'8:55 · Post-nado ⚡ (primeros 30 min)',i:'Mass Gainer SNP 1 scoop en leche de vaca + mango grande + banano · O 4-5 dátiles si no tienes fruta a mano'},
+      {t:'10:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:00 · Snack media mañana',i:'Guayaba 2 unidades + yogur natural 150g + dátiles 2 unidades · La guayaba es la fruta colombiana con más vitamina C — refuerza el sistema inmune que el nado desgasta · El yogur + kéfir del desayuno = doble refuerzo de probióticos para el colon'},
+      {t:'12:30 · Almuerzo',i:'Mojarra roja 180g al horno con aceite de aguacate + cúrcuma · Papa pastusa enfriada + habichuela al vapor + zanahoria cocida · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
+      {t:'13:15 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Calma el colon y reduce inflamación muscular'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · Yogur natural 150g + guayaba 2 unidades + 1 bocadillo veleño'},
+      {t:'19:30 · Cena',i:'Carne de res magra 160g a la plancha con aceite de aguacate · Arroz blanco 100g + espinaca cocida con cúrcuma · Kéfir 150ml'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio glicinato 300mg'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas)'}
+    ]},
+    {dia:'Viernes — Nado Z2 3000m + Run Z2 35 min · DÍA DOBLE · SEMANA 2',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno — más carbos hoy',i:'Arepa integral + 2 huevos fritos en aceite de aguacate + banano + maracuyá o guanábana · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · Nuez del Brasil 3-4 nueces · Día doble = necesitas más energía desde la mañana'},
+      {t:'7:45 · Nado Z2 — 3000m (~65 min)',i:'Agua sola · Z2 usa principalmente grasas · Llevar 2 dátiles por si el nado se extiende más de 75 min'},
+      {t:'~9:00 · Entre nado y run',i:'Banano + agua de panela con sal · 1 bocadillo veleño también funciona aquí antes del run'},
+      {t:'~9:40 · Post-run ⚡ (primeros 30 min)',i:'Arroz blanco 130g con aceite de aguacate + pollo 170g + banano · Día doble = reservas muy bajas — no saltar esta comida'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua · Tómala entre el post-entreno y el almuerzo'},
+      {t:'11:00 · Snack media mañana',i:'Uchuvas 100g + aguacate pequeño con limón · Día doble = más calorías necesarias entre comidas · El aguacate aporta grasa buena que sostiene la energía en el segundo entreno del día sin dar pesadez · Las uchuvas suman antioxidantes para reducir el daño muscular del doble entreno'},
+      {t:'12:30 · Almuerzo',i:'Bagre al horno 170g con aceite de oliva extra virgen + cúrcuma · Lentejas 120g + plátano verde cocido + zanahoria · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
+      {t:'13:15 · Infusión',i:'Cúrcuma + jengibre + limón · Día doble genera más inflamación — más necesaria hoy · El jengibre calma el intestino antes del brick del sábado'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 3-4 dátiles + maní 25g'},
+      {t:'19:30 · Cena — PRE-CARGA SÁBADO 🔴',i:'Arroz blanco 200g + pollo 150g con aceite de aguacate + zanahoria cocida con cúrcuma · 1 bocadillo veleño de postre · Kéfir 150ml · Esta cena ES la carga para el día más duro de la semana'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio glicinato 300mg · Dormir 8-9 horas obligatorio — el brick del sábado lo necesita'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas)'}
+    ]},
+    {dia:'Sábado — 🔴 Nado Z2 + sprint finish 3500m + Bici largo con brick 2h 30min + 25 min run · DÍA MÁXIMO · SEMANA 2',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno MÁXIMO — no salir sin esto',i:'Arroz blanco 200g con aceite de aguacate + tortilla de 3 huevos con atún en agua 80g + banano grande · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · 💊 Totalmax · Esta es la comida más importante de la semana'},
+      {t:'7:45 · Nado Z2 + sprint finish — 3500m',i:'Agua sola · Hidratarse bien antes de entrar · El sprint finish al final = vaciado de glucógeno total'},
+      {t:'~9:15 · Transición nado → brick',i:'Banano grande + agua de panela con sal + limón · Alternativa: 3-4 dátiles deshidratados — energía inmediata antes del brick más largo del año'},
+      {t:'~9:30 · Durante brick Bici+Run — 2h 30min + 25min 🚴🏃',i:'CADA 20 MIN: agua de panela + sal + limón · Cada 45 min: banano O 3 dátiles O 1 bocadillo veleño · Objetivo: 60g de azúcar/hora · Mochila: 2 bananos + 2 dátiles + 1 bocadillo + 2 botellas de panela · Sin esto los últimos 60 min el cuerpo quema músculo'},
+      {t:'~12:30 · Post-brick ⚡⚡ URGENTE (primeros 30 min)',i:'Arroz blanco 200g con aceite de aguacate + carne de res magra 200g + mango + banano · HOY DOBLA TODO · Mass Gainer SNP 1-2 scoops en leche de vaca · 💊 Creatina 5g'},
+      {t:'13:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — hoy el entreno termina tarde, esta es la mejor ventana · 1h después del post-brick y 1h antes del almuerzo'},
+      {t:'14:30 · Almuerzo',i:'Cerdo magro 200g a la plancha con aceite de aguacate + cúrcuma · Frijoles 150g bien cocidos + yuca enfriada + aguacate · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
+      {t:'15:30 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Hoy es el día que más la necesitas — 4+ horas de entreno'},
+      {t:'17:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca · Yogur natural + 2 bocadillos veleños + guayaba · Nuez del Brasil 3-4 nueces'},
+      {t:'20:00 · Cena',i:'Trucha al horno 180g con aceite de oliva + cúrcuma + pimienta negra · Arroz integral 150g + espinaca cocida · Kéfir 150ml'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio glicinato 400mg (dosis extra hoy por el esfuerzo) · Dormir 9 horas si puedes'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas)'}
+    ]},
+    {dia:'Domingo — 🔵 Bici Z2 endurance · 90 min · Recuperación · SEMANA 2',comidas:[
+      {t:'5:35 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno · El cuerpo sigue recuperándose del sábado'},
+      {t:'6:00',i:'💊 Colágeno NucleVit en jugo de guayaba'},
+      {t:'6:15 · Desayuno liviano',i:'Mazamorra de maíz 200ml + 2 huevos revueltos con sardinas en agua escurridas + banano + maní 20g · Mass Gainer SNP 1 scoop en leche de vaca · Kéfir 150ml · Nuez del Brasil 3-4 nueces · Aceite de oliva extra virgen'},
+      {t:'7:45 · Bici Z2 endurance — 90 min',i:'Agua sola la primera hora · Si pasa de 75 min: agua de panela con sal · Z2 endurance construye base aeróbica sin agotar — no hay que forzar · Llevar 2 dátiles por si acaso en el bolsillo'},
+      {t:'9:15 · Post-bici ⚡ (primeros 30 min)',i:'Banano grande + Mass Gainer SNP 1 scoop en leche de vaca · Recuperación liviana — el domingo es para recuperar'},
+      {t:'10:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento cercano'},
+      {t:'11:00 · Snack media mañana',i:'Mango tommy maduro 1 unidad + maní natural 25g + yogur natural 100g · Domingo es recuperación — el mango tiene vitaminas A, C y B6 que el cuerpo usa para reparar el tejido muscular · El maní aporta grasa y proteína para mantener el peso sin sobrecargar el intestino'},
+      {t:'12:30 · Almuerzo',i:'Pollo al horno 170g con cúrcuma + aceite de oliva · Quinua 80g + remolacha cocida + zanahoria + habichuela · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
+      {t:'13:15 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Esta infusión cierra la semana antiinflamatoria'},
+      {t:'15:00 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 1 bocadillo veleño + yogur natural 150g + guayaba · Semillas de auyama 20g'},
+      {t:'19:30 · Cena',i:'2 huevos pochados + aguacate con aceite de aguacate + papa criolla enfriada + pepino con limón · Kéfir 150ml · Cena liviana para no cargar el intestino'},
+      {t:'20:00 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio glicinato 300mg · La cena del domingo y el sueño de esta noche determinan cómo arrancas el lunes'},
+      {t:'22:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas)'}
+    ]}
+  ],
+  perdida:[
+    {dia:'Lunes — Mojarra + Verduras',comidas:[
+      {t:'Desayuno',i:'2 huevos cocinados + espinaca salteada con aceite de coco + tomate chonto · Mucha proteína, pocas calorías, te llena horas'},
+      {t:'Almuerzo',i:'Mojarra roja a la plancha 180g (del Betania, baja en grasa, alta en proteína) + ensalada grande: lechuga, pepino, zanahoria, remolacha + limón · Mucho volumen, pocas calorías · Sin pimentón'},
+      {t:'Merienda',i:'Kumis natural 150ml + pepino cohombro · Bacterias buenas + hidratación + casi sin calorías'},
+      {t:'Cena',i:'Sardinas en agua 120g escurridas + habichuela al vapor + cebolla cocida · Omega-3 + proteína para no tener hambre en la noche'}
+    ]},
+    {dia:'Martes — Pollo + Legumbres',comidas:[
+      {t:'Desayuno',i:'Avena en agua 50g + canela + moras o uchuvas · Mantiene el azúcar estable y da saciedad por horas sin engordar'},
+      {t:'Almuerzo',i:'Pechuga de pollo 150g a la plancha + ensalada grande de espinaca, pepino, zanahoria cruda, remolacha + limón y cilantro · Sin pimentón'},
+      {t:'Merienda',i:'Guayaba 2 unidades + maní natural 20g · Fibra + proteína + grasa buena = no tienes hambre hasta la cena'},
+      {t:'Cena',i:'2 huevos revueltos + repollo crudo rallado con limón + aguacate pequeño · Proteína alta, calorías bajas, fibra que llena'}
+    ]},
+    {dia:'Miércoles — Trucha + Tubérculos',comidas:[
+      {t:'Desayuno',i:'3 claras de huevo + 1 yema revueltos + espinaca + tomate chonto · Alta proteína, poca grasa, te llena sin engordar'},
+      {t:'Almuerzo',i:'Trucha a la plancha 170g (omega-3 que quema grasa y cuida el corazón) + papa criolla pequeña enfriada (almidón resistente = pocas calorías) + brócoli o habichuela · Sin pimentón'},
+      {t:'Merienda',i:'Yogur natural sin azúcar 150g + guayaba · Proteína + vitamina C + bacterias buenas'},
+      {t:'Cena',i:'Bocachico al vapor 150g + ensalada de zanahoria cocida y pepino + limón · Liviano, fácil para el colon, sin calorías extras'}
+    ]},
+    {dia:'Jueves — Res magra + Fibra',comidas:[
+      {t:'Desayuno',i:'Avena en agua 50g + chía 10g + banano pequeño · Fibra que llena el estómago y estabiliza el azúcar en sangre'},
+      {t:'Almuerzo',i:'Carne de res magra (murillo o lomo) 150g a la plancha + ensalada grande de lechuga, pepino, zanahoria, habichuela + limón · La res magra tiene proteína alta y zinc para la testosterona · Sin pimentón'},
+      {t:'Merienda',i:'Kumis 150ml + moras o uchuvas · Pocas calorías, muchos beneficios'},
+      {t:'Cena',i:'Huevos 2 + espinaca salteada + aguacate pequeño · Grasas buenas que ayudan a perder grasa (el cuerpo necesita grasa para quemar grasa)'}
+    ]},
+    {dia:'Viernes — Hígado + Verduras (el día de hierro)',comidas:[
+      {t:'Desayuno',i:'2 huevos + arroz blanco pequeño 50g + kumis 150ml · Energía limpia para terminar la semana fuerte'},
+      {t:'Almuerzo',i:'Hígado de res 150g encebollado sin pimentón + arroz blanco 80g + zanahoria y ahuyama cocidas · El hígado es el alimento más completo: hierro, B12, zinc, vitamina A — todo junto · Comer guayaba después para absorber mejor el hierro'},
+      {t:'Merienda',i:'Guayaba 2 unidades (vitamina C que ayuda a absorber el hierro del almuerzo) + maní 20g'},
+      {t:'Cena',i:'Bagre al vapor 150g o sardinas en agua + ensalada de repollo rallado con limón + papa criolla pequeña · Liviano, nutritivo, cuida el intestino'}
+    ]}
+  ]
+};
+
+function renderPlan(){
+  const ef=document.getElementById('enfoque').value;
+  const data=planData[ef];
+  let html='';
+  data.forEach(d=>{
+    html+=`<div class="card"><h3>${d.dia}</h3>`;
+    d.comidas.forEach(c=>{html+=`<div class="meal"><div class="mt">${c.t}</div><div class="mi">${c.i}</div></div>`;});
+    html+='</div>';
+  });
+  html+=`<div class="card card-accent"><p style="font-size:12px;color:var(--text2)">Mostrando 2-3 días representativos. Los días restantes siguen la misma estructura variando la fuente de proteína (pescado azul mínimo 3×/semana), el cereal integral y la verdura de temporada. <strong>Hidratación:</strong> mínimo 35ml/kg/día.</p></div>`;
+  document.getElementById('plan-content').innerHTML=html;
+}
+
+function renderSupl(){
+  const s=document.getElementById('sobj').value;
+  let html='';
+  suplData[s].forEach(sup=>{
+    html+=`<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:.4rem">
+        <span style="font-size:13px;font-weight:500">${sup.n}</span>
+        <span class="badge ${sup.c}">Evidencia ${sup.e}</span>
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:.3rem">${sup.d}</p>
+      <p style="font-size:11px;color:var(--text2)"><i class="ti ti-clock"></i> <strong>Dosis:</strong> ${sup.dos}</p>
+      <p style="font-size:11px;color:var(--text2);margin-top:.25rem"><i class="ti ti-info-circle"></i> ${sup.nota}</p>
+    </div>`;
+  });
+  document.getElementById('supl-content').innerHTML=html;
+}
+
+function show(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='plan')renderPlan();
+  if(id==='suplementos')renderSupl();
+  if(id==='deporte'){updD();setSys(0);}
+}
+
+loadProfile(); updM(); renderPlan(); renderSupl(); updD(); setSys(0);
+</script>
+</body>
+</html>
+
