@@ -207,6 +207,7 @@
     <div class="card">
       <h3>Plan alimentario semanal</h3>
       <div class="row"><label>Enfoque nutricional</label><select id="enfoque" onchange="renderPlan()">
+        <option value="recuperacion">🦵 Recuperación Post-Cirugía LCA (activo)</option>
         <option value="microbiota">Alimentación prebiótica (microbiota)</option>
         <option value="deporte">Rendimiento deportivo + Suplementos — Semana 1</option>
         <option value="deporte2">Rendimiento deportivo + Suplementos — Semana 2</option>
@@ -621,11 +622,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Uchuvas frescas 100g (vitamina C + antioxidantes que el triatleta necesita) + maní natural tostado 25g (grasa buena + proteína + zinc para testosterona) · Las uchuvas son una de las frutas más completas para deportistas — fáciles de llevar en bolsita'},
       {t:'13:00 · Almuerzo',i:'Trucha a la plancha 180g con aceite de aguacate + cúrcuma + pimienta negra · Frijoles bien cocidos 120g + arroz integral enfriado + zanahoria cocida · 🫒 Remolacha cocida 100g en rodajas frías con limón — acompañante diario (la remolacha fría tiene más nitratos disponibles que caliente) · Sin pimentón · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado)'},
       {t:'13:45 · Infusión post-almuerzo',i:'Infusión de cúrcuma + jengibre fresco + limón · Hervir agua, rallare un trozo de jengibre + 1 cucharadita de cúrcuma + limón · Calma el colon, antiinflamatoria para los músculos · Tomar todos los días después del almuerzo'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 3-4 dátiles deshidratados + yogur natural 150g · Los dátiles son energía natural perfecta a esta hora'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · 3-4 dátiles deshidratados + yogur natural 150g · Los dátiles son energía natural perfecta a esta hora'},
       {t:'20:00 · Cena',i:'3 huevos enteros con espinaca salteada en aceite de oliva extra virgen + aguacate + papa criolla enfriada · Kéfir 150ml después'},
-      {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel (de noche — pero recuerda que el Colágeno Zoi ya tiene Resveratrol, considera si necesitas ambos) · 💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg elemental + Vitamina D3 400IU incluida) · El 95% de la testosterona se produce mientras duermes — el Mg glicinato + D3 potencia esto'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'20:30 · Antes de dormir',i:'💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU) · El 95% de la testosterona se produce mientras duermes — el Mg glicinato + D3 lo potencia · ⚠ El NAD+ Resveratrol se movió a las 15:30-18:00 — tomarlo de noche puede dificultar el sueño'},
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Martes — ⚡ Run Race Pace 5×1 km · DÍA DURO',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
@@ -636,11 +637,11 @@ const planData={
       {t:'11:00 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua — sin jugo, sin leche, sin nada más · ⚠ Bloquea cualquier suplemento o medicamento cercano · Tómala entre el post-entreno y el almuerzo'},
       {t:'12:00 · Snack media mañana',i:'Yogur natural 150g + 3 dátiles deshidratados + semillas de auyama 15g · Las semillas de auyama son ricas en zinc — uno de los minerales más importantes para la testosterona y que más se pierde sudando en Neiva · Los dátiles dan energía rápida para la tarde'},
       {t:'13:00 · Almuerzo',i:'Carne de res magra 160g + lentejas 120g bien cocidas + yuca enfriada + zanahoria · 🫒 Remolacha cocida 100g en rodajas frías — acompañante diario · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · Semillas de auyama 20g (zinc para testosterona)'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · Semillas de auyama 20g (zinc para testosterona)'},
       {t:'20:00 · Cena',i:'Bocachico o sardinas 160g + papa criolla enfriada + pepino con limón · Kéfir 150ml'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU) · Dormir mínimo 8 horas — el músculo se reconstruye de noche'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Miércoles — 🔵 Bici Z2 Recovery · 60 min · DÍA DE RECUPERACIÓN',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno · Hoy es recuperación activa — el cuerpo absorbe el estímulo del Run Race Pace de ayer'},
@@ -652,11 +653,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Guayaba 2 unidades + maní natural 25g + yogur natural 150g · Día recovery = menos calorías totales pero no pasar hambre · La guayaba tiene vitamina C que ayuda a sintetizar colágeno para las articulaciones que trabajan mucho en el triatlón'},
       {t:'13:00 · Almuerzo — recovery',i:'Hígado de res 150g encebollado con aceite de oliva (sin pimentón) + arroz blanco 100g + ahuyama cocida con cúrcuma + habichuela · 🫒 Remolacha cocida 100g en rodajas frías — acompañante diario · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Comer guayaba de postre — vitamina C mejora absorción del hierro del hígado'},
       {t:'13:45 · Infusión post-almuerzo',i:'Cúrcuma + jengibre fresco rallado + limón hervidos 5 min · Hábito diario — hoy más importante porque el miércoles de recovery es el momento que el músculo se repara con más eficiencia'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 2-3 dátiles deshidratados + maní natural 20g · Día recovery = menos cantidad pero mantener los suplementos clave'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · 2-3 dátiles deshidratados + maní natural 20g · Día recovery = menos cantidad pero mantener los suplementos clave'},
       {t:'20:00 · Cena',i:'Trucha al horno con cúrcuma + jengibre + aceite de oliva 180g + papa criolla + espinaca cocida · Kéfir 150ml · La cúrcuma con pimienta negra multiplica su efecto antiinflamatorio — ideal para preparar el jueves de nado'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU) · El sueño del miércoles es cuando el cuerpo más se recupera del race pace del martes'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Jueves — Nado Race Pace · 3200 m',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
@@ -668,11 +669,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Maracuyá 2 unidades con panela raspada (vitamina C + antioxidantes + azúcar natural de panela) + semillas de auyama 20g · El maracuyá es una de las frutas más ricas en vitamina C del Huila — refuerza el sistema inmune del triatleta'},
       {t:'13:00 · Almuerzo',i:'Pollo a la plancha 170g con aceite de aguacate + cúrcuma + comino · Frijoles cargamanto 120g bien cocidos + ñame enfriado + habichuela al vapor · 🫒 Remolacha cocida 100g en rodajas frías — acompañante diario · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
       {t:'13:45 · Infusión',i:'Cúrcuma + jengibre fresco + limón hervidos 5 min · Hábito diario post-almuerzo — calma el colon y reduce inflamación muscular'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 2 bocadillos veleños + yogur natural 150g + moras · Los bocadillos son energía rápida de guayaba + panela perfecta para la tarde'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · 2 bocadillos veleños + yogur natural 150g + moras · Los bocadillos son energía rápida de guayaba + panela perfecta para la tarde'},
       {t:'20:00 · Cena',i:'Mojarra o cachama del Betania 170g a la plancha con aceite de oliva + cúrcuma · Yuca enfriada + pepino con limón y cilantro · Kéfir 150ml con la cena'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU)'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Viernes — Nado Z2 3000m + Run Z2 35 min · DÍA DOBLE',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
@@ -685,11 +686,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Uchuvas 100g + aguacate pequeño + guayaba 1 unidad · Día doble = más calorías necesarias · El aguacate aporta grasa buena que ayuda a producir testosterona — comerlo a media mañana no interfiere con el entreno de la tarde · Las uchuvas + guayaba = doble dosis de vitamina C'},
       {t:'13:00 · Almuerzo',i:'Bagre al vapor 170g con aceite de oliva extra virgen + cúrcuma · Lentejas 120g + papa criolla enfriada + zanahoria cocida · 🫒 Remolacha cocida 100g en rodajas frías — acompañante diario, especialmente útil el viernes que pre-carga el sábado · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
       {t:'13:45 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Hoy más que nunca — día doble genera más inflamación muscular · El jengibre también calma el intestino antes del brick del sábado'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 3-4 dátiles + guayaba 2 unidades + maní 25g'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · 3-4 dátiles + guayaba 2 unidades + maní 25g'},
       {t:'20:00 · Cena — PRE-CARGA SÁBADO 🔴',i:'Arroz blanco 200g + pollo 150g o carne res con aceite de aguacate + zanahoria cocida con cúrcuma · 1 bocadillo veleño de postre — azúcar natural de guayaba que se almacena como energía para mañana · Mass Gainer SNP 1 scoop en leche · Kéfir 150ml · Esta cena ES la carga para el día más duro de la semana'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU) · Dormir 8-9 horas obligatorio — el brick del sábado lo necesita'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Sábado — 🔴 Nado Z2 + sprint finish 3500m + ⚡ Bici Race Pace 4×10 min + Brick run 15 min · DÍA MÁXIMO',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
@@ -705,8 +706,8 @@ const planData={
       {t:'17:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca · Yogur natural + moras + 2 bocadillos veleños · Nuez del Brasil 3-4 nueces'},
       {t:'20:30 · Cena',i:'Carne de res magra 180g a la plancha con aceite de aguacate + arroz blanco 150g + espinaca cocida con cúrcuma + zanahoria · Kéfir 150ml con la cena'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio Glicinato Mountain Valley 3 cápsulas (231mg Mg + D3 600IU — dosis extra sábado por el esfuerzo máximo) · Dormir 9 horas si puedes'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Domingo — 🧱 Brick largo: Bici Z2 75 min + Run Z2 20 min',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno · El cuerpo sigue recuperándose del sábado — el brick de hoy es largo pero en Z2, no en race pace'},
@@ -718,11 +719,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Guayaba 2 unidades + maní natural 25g + yogur natural 100g · Domingo = día de recuperación total · La guayaba tiene más vitamina C que la naranja y ayuda a sintetizar colágeno para las articulaciones · El maní + yogur = proteína + grasa que sostiene la energía sin picos'},
       {t:'13:00 · Almuerzo',i:'Bocachico o bagre 170g al vapor con aceite de oliva extra virgen + cúrcuma · Lentejas 120g + ñame enfriado + zanahoria cocida · 🫒 Remolacha cocida 100g en rodajas frías — cierra la semana con nitrato natural para la recuperación · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle (son el mismo suplemento — protege el hígado) · Sin pimentón'},
       {t:'13:45 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Domingo es el día de recuperación total — esta infusión cierra la semana antiinflamatoria'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 1 bocadillo veleño + yogur natural + guayaba + semillas de auyama 20g · El bocadillo da energía natural de guayaba para recuperar'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · 1 bocadillo veleño + yogur natural + guayaba + semillas de auyama 20g · El bocadillo da energía natural de guayaba para recuperar'},
       {t:'20:00 · Cena',i:'2 huevos + aguacate con aceite de aguacate + yuca o papa criolla enfriada + pepino con limón · Kéfir 150ml con la cena · Cena liviana para no cargar el intestino'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU) · La cena del domingo y el sueño de esta noche determinan cómo arrancas el lunes'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]}
   ],
   deporte2:[
@@ -736,11 +737,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Moras frescas 100g + yogur natural 150g + maní 20g · Las moras son antiinflamatorias naturales — perfectas para recuperar después del run · El yogur suma bacterias buenas a las del kéfir del desayuno'},
       {t:'13:00 · Almuerzo',i:'Cachama al vapor 180g con aceite de oliva + cúrcuma · Quinua 80g + remolacha cocida + habichuela al vapor · 💊 Omega-3 (3 cápsulas de aceite de pescado) + Cardo Mariano / Milk Thistle · Sin pimentón'},
       {t:'13:45 · Infusión post-almuerzo',i:'Cúrcuma + jengibre fresco + limón hervidos 5 min · Hábito diario — antiinflamatoria para el intestino y los músculos'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · Yogur natural 150g + 1 bocadillo veleño + guayaba'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · Yogur natural 150g + 1 bocadillo veleño + guayaba'},
       {t:'20:00 · Cena',i:'Sopa liviana de pollo 150g + papa criolla + zanahoria + cilantro · Kéfir 150ml · Fácil de digerir, reconfortante para el colon'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel (SIEMPRE de noche) · 💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU)'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Martes — ⚡ Run Race Pace 5×1 km · DÍA DURO · SEMANA 2',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
@@ -752,11 +753,11 @@ const planData={
       {t:'12:00 · Snack media mañana',i:'Uchuvas 100g + 1 bocadillo veleño · Día duro = más calorías entre comidas · Las uchuvas tienen vitamina K y fósforo que el músculo necesita después de los intervalos de Race Pace · El bocadillo da azúcar natural rápida de guayaba + panela'},
       {t:'13:00 · Almuerzo',i:'Cerdo magro a la plancha 160g con aceite de aguacate + cúrcuma · Frijoles cargamanto 120g + plátano maduro cocido · 🫒 Remolacha cocida 100g en rodajas frías · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
       {t:'13:45 · Infusión',i:'Cúrcuma + jengibre + limón · Día duro = más inflamación muscular = más necesaria'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · Semillas de auyama 20g (zinc natural para testosterona) + yogur natural 100g'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · Semillas de auyama 20g (zinc natural para testosterona) + yogur natural 100g'},
       {t:'20:00 · Cena',i:'Trucha al horno 160g con cúrcuma + aceite de oliva · Papa criolla enfriada + espinaca cocida · Kéfir 150ml'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU) · Dormir mínimo 8 horas'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Miércoles — 🔵 Bici Z2 Recovery · 60 min · DÍA DE RECUPERACIÓN · SEMANA 2',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno · Recuperación activa post-race pace de ayer'},
@@ -768,11 +769,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Maracuyá 2 unidades con panela + semillas de auyama 20g + maní 15g · El maracuyá es fibra + vitamina C sin irritar el colon · Día recovery = snack liviano, no llegar vacío al almuerzo'},
       {t:'13:00 · Almuerzo — recovery',i:'Hígado de res 150g encebollado con aceite de oliva (sin pimentón) + arroz blanco 100g + ahuyama cocida con cúrcuma + habichuela · 🫒 Remolacha cocida 100g en rodajas frías · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Comer guayaba después — vitamina C mejora absorción del hierro'},
       {t:'13:45 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Hábito diario post-almuerzo'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 4 dátiles deshidratados + maní natural 25g'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · 4 dátiles deshidratados + maní natural 25g'},
       {t:'20:00 · Cena',i:'Bocachico al vapor 160g con aceite de oliva + cúrcuma · Yuca enfriada + pepino con limón y cilantro · Kéfir 150ml'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU)'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Jueves — Nado Race Pace · 3200 m · SEMANA 2',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
@@ -784,11 +785,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Guayaba 2 unidades + yogur natural 150g + dátiles 2 unidades · La guayaba es la fruta colombiana con más vitamina C — refuerza el sistema inmune que el nado desgasta · El yogur + kéfir del desayuno = doble refuerzo de probióticos para el colon'},
       {t:'13:00 · Almuerzo',i:'Mojarra roja 180g al horno con aceite de aguacate + cúrcuma · Papa pastusa enfriada + habichuela al vapor + zanahoria cocida · 🫒 Remolacha cocida 100g en rodajas frías · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
       {t:'13:45 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Calma el colon y reduce inflamación muscular'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · Yogur natural 150g + guayaba 2 unidades + 1 bocadillo veleño'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · Yogur natural 150g + guayaba 2 unidades + 1 bocadillo veleño'},
       {t:'20:00 · Cena',i:'Carne de res magra 160g a la plancha con aceite de aguacate · Arroz blanco 100g + espinaca cocida con cúrcuma · Kéfir 150ml'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU)'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Viernes — Nado Z2 3000m + Run Z2 35 min · DÍA DOBLE · SEMANA 2',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
@@ -801,11 +802,11 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Uchuvas 100g + aguacate pequeño con limón · Día doble = más calorías necesarias entre comidas · El aguacate aporta grasa buena que sostiene la energía en el segundo entreno del día sin dar pesadez · Las uchuvas suman antioxidantes para reducir el daño muscular del doble entreno'},
       {t:'13:00 · Almuerzo',i:'Bagre al horno 170g con aceite de oliva extra virgen + cúrcuma · Lentejas 120g + plátano verde cocido + zanahoria · 🫒 Remolacha cocida 100g en rodajas frías — pre-carga del sábado · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
       {t:'13:45 · Infusión',i:'Cúrcuma + jengibre + limón · Día doble genera más inflamación — más necesaria hoy · El jengibre calma el intestino antes del brick del sábado'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 3-4 dátiles + maní 25g'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · 3-4 dátiles + maní 25g'},
       {t:'20:00 · Cena — PRE-CARGA SÁBADO 🔴',i:'Arroz blanco 200g + pollo 150g con aceite de aguacate + zanahoria cocida con cúrcuma · 1 bocadillo veleño de postre · Kéfir 150ml · Esta cena ES la carga para el día más duro de la semana'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU) · Dormir 8-9 horas obligatorio — el brick del sábado lo necesita'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Sábado — 🔴 Nado Z2 + sprint finish 3500m + ⚡ Bici Race Pace 4×10 min + Brick run 15 min · DÍA MÁXIMO · SEMANA 2',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno'},
@@ -821,8 +822,8 @@ const planData={
       {t:'17:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca · Yogur natural + 2 bocadillos veleños + guayaba · Nuez del Brasil 3-4 nueces'},
       {t:'20:30 · Cena',i:'Trucha al horno 180g con aceite de oliva + cúrcuma + pimienta negra · Arroz integral 150g + espinaca cocida · Kéfir 150ml'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio Glicinato Mountain Valley 3 cápsulas (231mg Mg + D3 600IU — dosis extra sábado por el esfuerzo máximo) · Dormir 9 horas si puedes'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
     ]},
     {dia:'Domingo — 🧱 Brick largo: Bici Z2 75 min + Run Z2 20 min · SEMANA 2',comidas:[
       {t:'6:00 · Ayunas',i:'💊 Liv.52 DS 2 tabletas solo con agua · Kéfir va con el desayuno · El cuerpo sigue recuperándose del sábado'},
@@ -834,11 +835,83 @@ const planData={
       {t:'11:30 · Snack media mañana',i:'Mango tommy maduro 1 unidad + maní natural 25g + yogur natural 100g · Domingo es recuperación — el mango tiene vitaminas A, C y B6 que el cuerpo usa para reparar el tejido muscular · El maní aporta grasa y proteína para mantener el peso sin sobrecargar el intestino'},
       {t:'13:00 · Almuerzo',i:'Pollo al horno 170g con cúrcuma + aceite de oliva · Quinua 80g + remolacha cocida + zanahoria + habichuela · 💊 Omega-3 (3 cápsulas) + Cardo Mariano · Sin pimentón'},
       {t:'13:45 · Infusión',i:'Cúrcuma + jengibre fresco + limón · Esta infusión cierra la semana antiinflamatoria'},
-      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g · 1 bocadillo veleño + yogur natural 150g + guayaba · Semillas de auyama 20g'},
+      {t:'15:30 · Merienda',i:'Mass Gainer SNP 1 scoop en leche de vaca + 💊 Creatina 5g + 💊 NAD+ Resveratrol 1 softgel (movido aquí desde la noche — de día activa mejor la energía celular y no interfiere con el sueño) · 1 bocadillo veleño + yogur natural 150g + guayaba · Semillas de auyama 20g'},
       {t:'20:00 · Cena',i:'2 huevos pochados + aguacate con aceite de aguacate + papa criolla enfriada + pepino con limón · Kéfir 150ml · Cena liviana para no cargar el intestino'},
       {t:'20:30 · Antes de dormir',i:'💊 NAD+ Resveratrol 1 softgel + 💊 Magnesio Glicinato Mountain Valley 2 cápsulas (154mg Mg + D3 400IU) · La cena del domingo y el sueño de esta noche determinan cómo arrancas el lunes'},
-      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ⚠ Todo va ANTES de la colestiramina de las 22:30 — nunca al revés'},
-      {t:'22:30 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día (cada 12 horas) · 2h después del Resveratrol y Magnesio · ⚠ NUNCA junto con la proteína — mínimo 4h de separación · La colestiramina bloquea todo lo que encuentre cerca'}
+      {t:'22:00 · Protocolo sueño + Snack pre-sueño',i:'🍌 Banano maduro + 1 cucharada de maní natural — evita el bajón de azúcar a las 3am · 💧 Valeriana gotas 20 gotas en un vasito de agua — tomar 30 min antes de acostarse · Calma el sistema nervioso, mejora el sueño profundo, reduce el cortisol nocturno del sobreentrenamiento · ⚠ No usar más de 2 meses seguidos — haz pausa de 2 semanas · ✅ Colestiramina ya fue tomada a las 19:00 — puedes tomar esto tranquilo'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — 2ª dosis del día · Mover a esta hora indicado por gastroenterólogo — tomar cerca de la cena NO interfiere con proteínas · ⚠ Sí separa de Omega-3, Resveratrol y vitaminas liposolubles (A, D, E, K) — esas sí las absorbe'}
+    ]}
+  ],
+  recuperacion:[
+    {dia:'Lunes — 🐟 Mojarra (Omega-3 antiinflamatorio)',comidas:[
+      {t:'7:00 · Desayuno',i:'💊 Liv.52 DS 2 tabletas en ayunas (protege hígado del acetaminofen + naproxeno) · 🐟 Colágeno Marino Zoi 1 scoop en jugo de guayaba — CRÍTICO para reconstrucción del LCA y menisco · 🥣 Avena 1 taza en leche de vaca + 1 banano maduro · 2 huevos duros o revueltos · 🥛 Kéfir 150ml — URGENTE: cefalexina destruye microbiota, reponer cada día · 💊 Magnesio Malato 1-2 cápsulas · 🌰 Nuez del Brasil 2 unidades (selenio para cicatrización) · ⚠ Cefalexina 500mg con este desayuno (SIEMPRE con comida) · ⚠ Separar kéfir de la cefalexina al menos 2h'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con un vaso grande de agua'},
+      {t:'11:30 · Media mañana',i:'1 banano + 1 cucharada crema de maní natural · O: yogur natural 150g + guayaba · Mantiene proteína y azúcar estables entre comidas'},
+      {t:'13:00 · Almuerzo',i:'🐟 Mojarra roja a la plancha 200g — Omega-3 antiinflamatorio, clave en recuperación post-cirugía · Arroz blanco 1 taza enfriado (almidón resistente) · Aguacate 1/2 · 🌿 Cúrcuma 1 cucharadita + pimienta negra generosa — antiinflamatorio potente que reduce hinchazón rodilla · 💊 Omega-3 3 cápsulas · 💊 Cardo Mariano · ⚠ Naproxeno 250mg SIEMPRE con esta comida — NUNCA en ayunas'},
+      {t:'16:00 · Merienda',i:'💪 Proteína whey isolate 1 scoop en agua (NO Mass Gainer — sin entreno el FOS fermenta y las calorías no tienen destino muscular) · 💊 Creatina 5g — NO pausar: hay evidencia de que preserva músculo durante inmovilización · 🍊 Fruta: maracuyá o uchuvas — vitamina C para síntesis de colágeno del LCA'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con un vaso grande de agua — nueva hora indicada por gastroenterólogo'},
+      {t:'20:00 · Cena',i:'🐔 Pollo a la plancha 150g + papa criolla 1 taza enfriada + zanahoria cocida suave · 🌿 Cúrcuma + pimienta negra · 💊 Magnesio Glicinato Mountain Valley 2 cápsulas + NAD+ Resveratrol · ⚠ Acetaminofen 500mg si hay dolor — con esta comida, nunca en ayunas · ⚠ Cefalexina 500mg 2ª dosis con cena'},
+      {t:'22:00 · Snack noche',i:'🍌 Banano maduro + 1 cucharada crema de maní · 💧 Valeriana 20 gotas en vasito de agua — 30 min antes de dormir · ✅ Colestiramina ya fue tomada a las 19:00'}
+    ]},
+    {dia:'Martes — 🍗 Pollo (proteína magra)',comidas:[
+      {t:'7:00 · Desayuno',i:'💊 Liv.52 DS 2 tabletas · 🐟 Colágeno Marino Zoi 1 scoop en jugo de guayaba · 🥣 Avena 1 taza en leche de vaca + 1 banano + 1 cucharada miel · 2 huevos · 🥛 Kéfir 150ml · 💊 Magnesio Malato · 🌰 Nuez del Brasil 2 unidades · ⚠ Cefalexina 500mg con desayuno'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con agua'},
+      {t:'11:30 · Media mañana',i:'Yogur natural 150g + guayaba 2 unidades · Proteína + vitamina C'},
+      {t:'13:00 · Almuerzo',i:'🐔 Pechuga de pollo 200g a la plancha · Arroz blanco 1 taza enfriado · Aguacate 1/2 · Zanahoria y habichuela cocidas · 🌿 Cúrcuma + pimienta negra · 💊 Omega-3 3 cápsulas · 💊 Cardo Mariano · ⚠ Naproxeno con esta comida'},
+      {t:'16:00 · Merienda',i:'💪 Proteína whey isolate en agua · 💊 Creatina 5g · Uchuvas o maracuyá (vitamina C)'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con agua'},
+      {t:'20:00 · Cena',i:'🐟 Trucha 150g al vapor + yuca 1 taza enfriada + ensalada suave (pepino + zanahoria cocida) · 🌿 Cúrcuma + pimienta negra · 💊 Magnesio Glicinato 2 cápsulas + NAD+ · ⚠ Acetaminofen si hay dolor · ⚠ Cefalexina 2ª dosis'},
+      {t:'22:00 · Snack noche',i:'🍌 Banano maduro + crema de maní · 💧 Valeriana 20 gotas · ✅ Colestiramina ya fue tomada a las 19:00'}
+    ]},
+    {dia:'Miércoles — 🐟 Trucha (colágeno + Omega-3)',comidas:[
+      {t:'7:00 · Desayuno',i:'💊 Liv.52 DS 2 tabletas · 🐟 Colágeno Marino Zoi 1 scoop en jugo de guayaba · 🥚 2 huevos revueltos con espinaca salteada · 🍌 1 banano · 🥛 Kéfir 150ml · 💊 Magnesio Malato · 🌰 Nuez del Brasil 2 unidades · ⚠ Cefalexina con desayuno'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con agua'},
+      {t:'11:30 · Media mañana',i:'Avena en agua 50g + canela + moras o uchuvas · Fibra + antioxidantes'},
+      {t:'13:00 · Almuerzo',i:'🐟 Trucha a la plancha 200g + arroz blanco 1 taza enfriado + papa criolla pequeña enfriada · Aguacate 1/2 · 🌿 Cúrcuma + pimienta negra · 💊 Omega-3 3 cápsulas · 💊 Cardo Mariano · ⚠ Naproxeno con almuerzo'},
+      {t:'16:00 · Merienda',i:'💪 Proteína whey isolate en agua · 💊 Creatina 5g · Guayaba 2 unidades'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con agua'},
+      {t:'20:00 · Cena',i:'🥚 3 huevos revueltos + papa criolla 1 taza enfriada + aguacate 1/2 · 🌿 Cúrcuma + pimienta negra · 💊 Magnesio Glicinato 2 cápsulas + NAD+ · ⚠ Acetaminofen si hay dolor · ⚠ Cefalexina 2ª dosis'},
+      {t:'22:00 · Snack noche',i:'🍌 Banano maduro + crema de maní · 💧 Valeriana 20 gotas · ✅ Colestiramina ya fue tomada a las 19:00'}
+    ]},
+    {dia:'Jueves — 🥩 Res magra (zinc + hierro para cicatrización)',comidas:[
+      {t:'7:00 · Desayuno',i:'💊 Liv.52 DS 2 tabletas · 🐟 Colágeno Marino Zoi 1 scoop en jugo de guayaba · 🥣 Avena 1 taza en leche de vaca + banano + chía 10g · 2 huevos · 🥛 Kéfir 150ml · 💊 Magnesio Malato · 🌰 Nuez del Brasil 2 unidades · ⚠ Cefalexina con desayuno'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con agua'},
+      {t:'11:30 · Media mañana',i:'Maní natural 30g + uchuvas · Proteína + grasa buena + antioxidantes'},
+      {t:'13:00 · Almuerzo',i:'🥩 Carne de res magra (murillo o lomo) 180g a la plancha — zinc para cicatrización del LCA · Arroz blanco 1 taza enfriado · Aguacate 1/2 · Habichuela al vapor · 🌿 Cúrcuma + pimienta negra · 💊 Omega-3 3 cápsulas · 💊 Cardo Mariano · ⚠ Naproxeno con almuerzo · Come guayaba después del almuerzo para absorber mejor el hierro de la carne'},
+      {t:'16:00 · Merienda',i:'💪 Proteína whey isolate en agua · 💊 Creatina 5g · Maracuyá (vitamina C)'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con agua'},
+      {t:'20:00 · Cena',i:'🐟 Bocachico al vapor 150g + yuca 1 taza enfriada · 🌿 Cúrcuma + pimienta negra · 💊 Magnesio Glicinato 2 cápsulas + NAD+ · ⚠ Acetaminofen si hay dolor · ⚠ Cefalexina 2ª dosis'},
+      {t:'22:00 · Snack noche',i:'🍌 Banano maduro + crema de maní · 💧 Valeriana 20 gotas · ✅ Colestiramina ya fue tomada a las 19:00'}
+    ]},
+    {dia:'Viernes — 🫀 Hígado (hierro + B12 + zinc — día de cicatrización)',comidas:[
+      {t:'7:00 · Desayuno',i:'💊 Liv.52 DS 2 tabletas · 🐟 Colágeno Marino Zoi 1 scoop en jugo de guayaba · 🥣 Avena 1 taza en leche de vaca + banano · 2 huevos · 🥛 Kéfir 150ml · 💊 Magnesio Malato · 🌰 Nuez del Brasil 2 unidades · ⚠ Cefalexina con desayuno'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con agua'},
+      {t:'11:30 · Media mañana',i:'Yogur natural 150g + moras · Bacterias buenas + antioxidantes'},
+      {t:'13:00 · Almuerzo',i:'🫀 Hígado de res 150g encebollado SIN PIMENTÓN — alimento más completo: hierro, B12, zinc, vitamina A, todo junto · Arroz blanco 80g · Zanahoria y ahuyama cocidas · 🌿 Cúrcuma + pimienta negra · 💊 Omega-3 3 cápsulas · 💊 Cardo Mariano · ⚠ Naproxeno con almuerzo · 🍊 Guayaba después del hígado — vitamina C duplica absorción del hierro'},
+      {t:'16:00 · Merienda',i:'💪 Proteína whey isolate en agua · 💊 Creatina 5g · Uchuvas o maracuyá'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con agua'},
+      {t:'20:00 · Cena',i:'🥚 2 huevos + papa criolla 1 taza enfriada + aguacate · 🌿 Cúrcuma + pimienta negra · 💊 Magnesio Glicinato 2 cápsulas + NAD+ · ⚠ Acetaminofen si hay dolor · ⚠ Cefalexina 2ª dosis'},
+      {t:'22:00 · Snack noche',i:'🍌 Banano maduro + crema de maní · 💧 Valeriana 20 gotas · ✅ Colestiramina ya fue tomada a las 19:00'}
+    ]},
+    {dia:'Sábado — 🐟 Bagre (Omega-3 + proteína completa)',comidas:[
+      {t:'7:00 · Desayuno',i:'💊 Liv.52 DS 2 tabletas · 🐟 Colágeno Marino Zoi 1 scoop en jugo de guayaba · 🥣 Avena en leche de vaca + banano + miel 1 cucharada · 2 huevos · 🥛 Kéfir 150ml · 💊 Magnesio Malato · 🌰 Nuez del Brasil 2 unidades'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con agua'},
+      {t:'11:30 · Media mañana',i:'Banano + maní natural 30g · O: yogur natural + guayaba'},
+      {t:'13:00 · Almuerzo',i:'🐟 Bagre al vapor 200g + arroz blanco 1 taza enfriado + aguacate 1/2 · Ensalada suave: pepino + zanahoria cocida · 🌿 Cúrcuma + pimienta negra · 💊 Omega-3 3 cápsulas · 💊 Cardo Mariano · ⚠ Naproxeno con almuerzo'},
+      {t:'16:00 · Merienda',i:'💪 Proteína whey isolate en agua · 💊 Creatina 5g · Fruta con vitamina C'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con agua'},
+      {t:'20:00 · Cena',i:'🐔 Pollo 150g + yuca 1 taza enfriada + zanahoria cocida · 🌿 Cúrcuma + pimienta negra · 💊 Magnesio Glicinato 2 cápsulas + NAD+ · ⚠ Acetaminofen si hay dolor'},
+      {t:'22:00 · Snack noche',i:'🍌 Banano maduro + crema de maní · 💧 Valeriana 20 gotas · ✅ Colestiramina ya fue tomada a las 19:00'}
+    ]},
+    {dia:'Domingo — 🥚 Huevos + variado (día de descanso digestivo)',comidas:[
+      {t:'7:00 · Desayuno',i:'💊 Liv.52 DS 2 tabletas · 🐟 Colágeno Marino Zoi 1 scoop en jugo de guayaba · 🥚 3 huevos revueltos con espinaca · 🍌 1 banano · 🥛 Kéfir 150ml · 💊 Magnesio Malato · 🌰 Nuez del Brasil 2 unidades'},
+      {t:'10:30 · 💊 Colestiramina DOSIS 1',i:'SOLA con agua'},
+      {t:'11:30 · Media mañana',i:'Yogur natural 150g + moras o uchuvas + maní 20g · Proteína + antioxidantes'},
+      {t:'13:00 · Almuerzo',i:'🐟 Mojarra o cachama 200g + arroz blanco 1 taza enfriado + papa criolla enfriada · Aguacate 1/2 · 🌿 Cúrcuma + pimienta negra · 💊 Omega-3 3 cápsulas · 💊 Cardo Mariano · ⚠ Naproxeno con almuerzo'},
+      {t:'16:00 · Merienda',i:'💪 Proteína whey isolate en agua · 💊 Creatina 5g · Guayaba o maracuyá'},
+      {t:'19:00 · 💊 Colestiramina DOSIS 2',i:'SOLA con agua'},
+      {t:'20:00 · Cena',i:'🥩 Res magra 150g o pollo + ñame 1 taza enfriado + ensalada suave · 🌿 Cúrcuma + pimienta negra · 💊 Magnesio Glicinato 2 cápsulas + NAD+'},
+      {t:'22:00 · Snack noche',i:'🍌 Banano maduro + crema de maní · 💧 Valeriana 20 gotas · ✅ Colestiramina ya fue tomada a las 19:00'}
     ]}
   ],
   perdida:[
